@@ -7,30 +7,7 @@ import GameConstants
 import EventManager
 import Events
 import Controllers
-
-#---------------------------------
-class PygameView:
-    '''
-    Pygame View of the game, handles the display
-    '''
-    def __init__(self, evManager):
-        self.evManager = evManager
-        self.evManager.RegisterListener( self )
-
-        pygame.init()
-        self.window = pygame.display.set_mode( (800,600) )
-        #self.window.fill((255,255,255))
-        pygame.display.set_caption( 'Test Game' )
-        self.background = pygame.Surface( self.window.get_size() )
-        self.background.fill( (0,255,0) )
-
-        pygame.display.flip()
-
-    #-------------------------------
-    def Notify(self,event):
-        if isinstance( event, Events.TickEvent ):
-            self.window.blit(self.background,(0,0))
-            pygame.display.update()
+import Views
 
 #--------------------------------------
 class Game:
@@ -55,9 +32,9 @@ def main():
     #while True:
     #    pygame.display.update()
 
-    pygameView = PygameView( evManager )
     keybd = Controllers.KeyboardController( evManager )
     spinner = Controllers.CPUSpinnerController( evManager )
+    pygameView = Views.PygameView( evManager )
     #game = Game( evManager )
     spinner.Run()
 
