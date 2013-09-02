@@ -51,7 +51,7 @@ class EventManager():
         if isinstance(event, Events.TickEvent):
             self.UpdateListeners()
             self.ConsumeEventQueue()
-        else:
+        elif not isinstance(event, Events.LogicTickEvent):
             Debug("    Message: "+event.name)
     
     # ------

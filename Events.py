@@ -23,6 +23,10 @@ class SecondEvent(Event):
     def __init__(self):
         self.name = "Clock One Second Event"
 
+class LogicTickEvent(Event):
+    def __init__(self):
+        self.name = "Logic Tick Event"
+
 class QuitEvent(Event):
     def __init__(self):
         self.name = "Quit Event"
