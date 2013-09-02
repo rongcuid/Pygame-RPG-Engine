@@ -28,6 +28,9 @@ class Game:
         self.evManager.RegisterListener( self )
 
         self.state = Game.STATE_PREPARING
+    #----------------
+    def Notify(self, event):
+        pass
 
 #---------------------------------------
 def main():
