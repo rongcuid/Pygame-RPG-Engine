@@ -6,10 +6,8 @@ Created on Aug 31, 2013
 
 from GameConstants import *
 import Events
+from Debug import Debug
 
-def Debug(msg):
-    print(msg)
-    
 
 class EventManager():
     '''
