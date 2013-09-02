@@ -1,3 +1,7 @@
+'''
+This file is the Controller part of the game.
+Contains all controllers needed for the game.
+'''
 import pygame
 from pygame.locals import *
 
