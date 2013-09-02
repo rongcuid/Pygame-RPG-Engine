@@ -38,7 +38,7 @@ class EventManager():
         '''
         for l in self.listenersToAdd:
             self.listeners[l] = 1
-        for l in self.listeners:
+        for l in self.listenersToRemove:
             if l in self.listeners:
                 del self.listeners[l]
         self.listenersToAdd = []
@@ -54,7 +54,7 @@ class EventManager():
             self.UpdateListeners()
             self.ConsumeEventQueue()
         else:
-            Debug("    Message: ",event.name)
+            Debug("    Message: "+event.name)
     
     # ------
     def ConsumeEventQueue(self):

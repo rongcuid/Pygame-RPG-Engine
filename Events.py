@@ -32,8 +32,9 @@ class FatalEvent(Event):
         self.name = "Fatal Error Event"
 
 class MapBuiltEvent(Event):
-    def __init__(self):
+    def __init__(self,map):
         self.name = "Map Built Event"
+        self.map = map
        
 class GameStartRequest(Event):
     def __init__(self):
@@ -70,4 +71,8 @@ class CharactorPlaceEvent(Event):
     def __init__(self, charactor):
         self.name = "Charactor Place Event"
         self.charactor = charactor
-        
+
+class PlayerJoinEvent(Event):
+    def __init__(self,player):
+        self.name = "Player Join Event"
+        self.player = player
