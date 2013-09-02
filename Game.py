@@ -1,3 +1,7 @@
+'''
+This file is the Model part of the game.
+Contains class Game
+'''
 import pygame
 from pygame.locals import *
 
@@ -11,6 +15,9 @@ import Views
 
 #--------------------------------------
 class Game:
+    '''
+    Main game class
+    '''
     STATE_PREPARING = 'Preparing'
     STATE_RUNNING = 'Running'
     STATE_PAUSED = 'Paused'
@@ -35,7 +42,8 @@ def main():
     keybd = Controllers.KeyboardController( evManager )
     spinner = Controllers.CPUSpinnerController( evManager )
     pygameView = Views.PygameView( evManager )
-    #game = Game( evManager )
+
+    game = Game( evManager )
     spinner.Run()
 
 

@@ -1,3 +1,7 @@
+'''
+This file is the View part of the game.
+Contains class PygameView
+'''
 import pygame
 from pygame.locals import *
 

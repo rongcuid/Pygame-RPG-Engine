@@ -1,9 +1,5 @@
 '''
-Created on Aug 31, 2013
-
 This file contains all types of events in the game
-
-@author: carl
 '''
 
 class Event():

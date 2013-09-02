@@ -1,7 +1,6 @@
 '''
-Created on Aug 31, 2013
-
-@author: carl
+This file contains the EventManager class which connects
+the Model-View-Control structure of the game.
 '''
 
 from GameConstants import *
