@@ -28,7 +28,7 @@ class Map():
         self.LoadTileList('data/test1_tileset.png')
 
         self.tileMap = [] # Stores Row list
-        self.Build([1,2,3,2,2,2,3,3,3],3)
+        self.Build([1,2,3,2,2,2,3,3,3],3) # Test map
         evManager.Post(Events.MapBuiltEvent(self.tileMap))
     #-----------------------
     def Build(self,tileMap,columns):
