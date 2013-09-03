@@ -29,6 +29,7 @@ class Map():
 
         self.tileMap = [] # Stores Row list
         self.Build([1,2,3,2,2,2,3,3,3],3)
+        evManager.Post(Events.MapBuiltEvent(self.tileMap))
     #-----------------------
     def Build(self,tileMap,columns):
         '''
@@ -83,7 +84,6 @@ class Map():
         NOTE: should use imported event lists for levels
         '''
         pass
-
 #--------------------------
 class Tile:
     def __init__(self,evManager,surface=None):

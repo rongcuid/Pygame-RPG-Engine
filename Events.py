@@ -76,3 +76,4 @@ class PlayerJoinEvent(Event):
     def __init__(self,player):
         self.name = "Player Join Event"
         self.player = player
+
