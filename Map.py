@@ -26,10 +26,26 @@ class Map():
 
         self.tileList = []
         self.LoadTileList('data/test1_tileset.png')
+
+        self.tileMap = [] # Stores Row list
+        self.Build([1,2,3,2,2,2,3,3,3],3)
     #-----------------------
-    def Build(self):
+    def Build(self,tileMap,columns):
+        '''
+        Reads a list of tiles used, the number of 
+        columns of tiles for the width, and construct map
+        '''
         # TODO: Basic builds
-        pass
+        rows = int(len(tileMap) / columns)
+        for tile_row in range(0,rows):
+            row = []
+            self.tileMap.append(row)
+            for tile_column in range (0,columns):
+                # tile_row * columns + tile_column is the
+                # position in tileList
+                self.tileMap[tile_row].append(
+                        self.tileList[tile_row * columns + tile_column])
+        Debug("Tile map initialized")
     #-----------------------
     def CanMove(self, tileX, tileY, direction):
         '''
