@@ -2,6 +2,8 @@
 This file is the Model part of the game.
 Contains class Game
 '''
+
+import sys
 import pygame
 from pygame.locals import *
 
@@ -12,6 +14,7 @@ import EventManager
 import Events
 import Controllers
 import Views
+import Map
 
 #--------------------------------------
 class Game:
@@ -28,6 +31,8 @@ class Game:
         self.evManager.RegisterListener( self )
 
         self.state = Game.STATE_PREPARING
+        
+        self.map = Map.Map( evManager ) 
     #----------------
     def Notify(self, event):
         pass

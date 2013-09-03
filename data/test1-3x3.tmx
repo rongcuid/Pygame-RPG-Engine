@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="3" height="3" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="Test" tilewidth="32" tileheight="32">
+  <image source="../../../../../../../usr/share/tiled/examples/sewer_tileset.png" width="192" height="217"/>
+ </tileset>
+ <layer name="Tile Layer 1" width="3" height="3">
+  <data encoding="base64" compression="zlib">
+   eJxjZGBgYAJiZijNhMSHYQABnAAW
+  </data>
+ </layer>
+</map>

@@ -1,0 +1,39 @@
+{ "height":3,
+ "layers":[
+        {
+         "data":[1, 2, 3, 2, 2, 2, 3, 3, 3],
+         "height":3,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
+        }],
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"..\/..\/..\/..\/..\/..\/..\/usr\/share\/tiled\/examples\/sewer_tileset.png",
+         "imageheight":217,
+         "imagewidth":192,
+         "margin":0,
+         "name":"Test",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }],
+ "tilewidth":32,
+ "version":1,
+ "width":3
+}

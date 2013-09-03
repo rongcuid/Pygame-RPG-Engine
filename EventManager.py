@@ -51,7 +51,7 @@ class EventManager():
             self.UpdateListeners()
             self.ConsumeEventQueue()
         elif not isinstance(event, Events.LogicTickEvent):
-            Debug("    Message: "+event.name)
+            Debug("Message: "+event.name)
     
     # ------
     def ConsumeEventQueue(self):

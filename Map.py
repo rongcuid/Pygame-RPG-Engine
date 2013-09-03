@@ -4,62 +4,74 @@ Created on Sep 1, 2013
 @author: carl
 '''
 
+import sys
 import pygame
 from pygame.locals import *
 
+from Debug import Debug
+
+import GameConstants
+import EventManager
 import Events
 
-from GameConstants import *
-
-#----------------------------------
-class Map:
-    '''
-    '''
-    STATE_PREPARING = 0
-    STATE_BUILT = 1
-    
-    # ------------------------------------------
-    def __init__(self,evManager):
+#-----------------------------
+class Map():
+    STATE_PREPARING = 'Preparing'
+    STATE_BUILT = 'Built'
+    def __init__(self, evManager):
         self.evManager = evManager
+        self.evManager.RegisterListener( self )
         
         self.state = Map.STATE_PREPARING
-        
-        self.sectors = []
-        self.startSectorIndex = 0
-    
-    #-----------------------------------
-    def Build(self):
-        for i in range(9):
-            #self.sectors[i] = Sector( self.evManager )
-            self.sectors.append(Sector(self.evManager))
-        for i in range(3,9):
-            self.sectors[i].neighbors[DIRECTION_UP] = self.sectors[i - 3]
-        for i in range(0,6):
-            self.sectors[i].neighbors[DIRECTION_DOWN] = self.sectors[i + 3]
-        for i in [1,2,4,5,7,8]:
-            self.sectors[i].neighbors[DIRECTION_LEFT] = self.sectors[i - 1]
-        for i in [0,1,3,4,6,7]:
-            self.sectors[i].neighbors[DIRECTION_RIGHT] = self.sectors[i + 1]
-            
-        self.state = Map.STATE_BUILT
-        
-        ev = Events.MapBuiltEvent(self)
-        self.evManager.Post(ev)
 
-# ----------------------------
-class Sector:
-    def __init__(self,evManager):
+        self.tileList = []
+        self.LoadTileList('data/test1_tileset.png')
+    #-----------------------
+    def Build(self):
+        # TODO: Basic builds
+        pass
+    #-----------------------
+    def CanMove(self, tileX, tileY, direction):
+        '''
+        @return: Returns if charactor can move in certain
+        direction on tile (tileX,tileY)
+        '''
+        # TODO: Implement this
+        pass
+    #-----------------------
+    def LoadTileList(self, filename):
+        '''
+        Loads tile list from tileset
+        '''
+        try:
+            tilesetImg = pygame.image.load(filename)
+        except:
+            print("Error: Tile set file ",filename,"does not exist.")
+            pygame.quit()
+            sys.exit()
+        Debug("Tileset is successfully loaded")
+        tilesetWidth,tilesetHeight = tilesetImg.get_size()
+        for tile_y in range(0,
+                int(tilesetHeight/GameConstants.TILESET_TILESIZE)):
+            for tile_x in range(0,
+                    int(tilesetWidth / GameConstants.TILESET_TILESIZE)):
+                rect = (tile_x * GameConstants.TILESET_TILESIZE,
+                        tile_y * GameConstants.TILESET_TILESIZE,
+                        GameConstants.TILESIZE,GameConstants.TILESIZE)
+                self.tileList.append(tilesetImg.subsurface(rect))
+        Debug("Tileset list is successfully created")
+
+    #-----------------------
+    def Notify(self,event):
+        '''
+        NOTE: should use imported event lists for levels
+        '''
+        pass
+
+#--------------------------
+class Tile:
+    def __init__(self,evManager,surface=None):
+        '''
+        Initiates a tile. Can have surface to display
+        '''
         self.evManager = evManager
-        
-        #self.neighbors = range(4)
-        self.neighbors = {}
-        
-        self.neighbors[DIRECTION_UP] = None
-        self.neighbors[DIRECTION_DOWN] = None
-        self.neighbors[DIRECTION_LEFT] = None
-        self.neighbors[DIRECTION_RIGHT] = None
-        
-    def MovePossible(self,direction):
-        if self.neighbors[direction]:
-            return 1
-#--------------------
