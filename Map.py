@@ -83,7 +83,10 @@ class Map():
     #-----------------------
     def LoadTileList(self, tilesets):
         '''
-        Loads tile list from tileset
+        Loads tile list from tileset. 
+        Iterates through tilesets to make tile lists
+        from different tilesets. Key of tileList
+        includes the offset of tileset
         '''
         # TODO: One list with offset
         tileList = {}
