@@ -52,20 +52,22 @@ class PygameView:
         self.window.blit( self.background,(0,0))
         pygame.display.flip()
 
+        mapLayer = gameMap[0]
+
         # Draw objects
-        for tile_y in range(0,len(gameMap)):
-            for tile_x in range(0,len(gameMap[0])):
-                tile = gameMap[tile_y][tile_x]
+        for tile_y in range(0,len(mapLayer)):
+            for tile_x in range(0,len(mapLayer[0])):
+                tile = mapLayer[tile_y][tile_x]
                 overlay = pygame.sprite.Sprite(self.overlays)
                 overlay.image = tile
-                # NOTE: gameMap is in form [tile_row][tile_column],
+                # NOTE: mapLayer is in form [tile_row][tile_column]
                 # so tile_y goes first
                 overlay.rect = tile.get_rect().move(
                         tile_y * GameConstants.TILESIZE,
                         tile_x * GameConstants.TILESIZE)
         # Test code
         #overlay = pygame.sprite.Sprite(self.overlays)
-        #testTile = gameMap[2][1]
+        #testTile = mapLayer[2][1]
         #overlay.image = testTile
         #overlay.rect = testTile.get_rect().move(16,16)
         # -----------
