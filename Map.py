@@ -28,7 +28,7 @@ class Map():
         self.LoadTileList('data/test1_tileset.png')
 
         self.tileMap = [] # Stores Row list
-        self.Build([1,2,3,2,2,2,3,3,3],3) # Test map
+        self.Build([1,2,3,2,2,2,3,3,3,4,5,6],3) # Test map
         evManager.Post(Events.MapBuiltEvent(self.tileMap))
     #-----------------------
     def Build(self,tileMap,columns):
@@ -42,10 +42,9 @@ class Map():
             row = []
             self.tileMap.append(row)
             for tile_column in range (0,columns):
-                # tile_row * columns + tile_column is the
-                # position in tileList
                 self.tileMap[tile_row].append(
-                        self.tileList[tile_row * columns + tile_column])
+                        self.tileList[
+                            tileMap[tile_row * columns + tile_column] - 1])
         Debug("Tile map initialized")
     #-----------------------
     def CanMove(self, tileX, tileY, direction):
