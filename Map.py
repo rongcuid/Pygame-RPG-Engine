@@ -26,14 +26,13 @@ class Map():
         self.state = Map.STATE_PREPARING
 
         tileLayersData,tilesetsData = self.Read('data/test1-3x3.json')
-        self.layers = []
         #self.tilesets = ['data/test1_tileset.png']
-        self.tileLists = self.LoadTileList(tilesetsData)
+        self.tileList = self.LoadTileList(tilesetsData)
 
         #self.tileMap = [] # Stores Row list
         # TODO: BuildLayers()
         self.layers = []
-        self.layers.append(self.Build([1,2,3,2,2,2,3,3,3],3)) # Test map
+        self.layers.append(self.Build([1, 3, 5, 8, 72, 66, 15, 71, 17],3)) # Test map
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self.layers))
@@ -69,7 +68,7 @@ class Map():
             for tile_column in range (0,columns):
                 #TODO: Multitileset support
                 tileMap[tile_row].append(
-                        self.tileLists[0][
+                        self.tileList[
                             tileMapData[tile_row * columns + tile_column] - 1])
         Debug("Tile map initialized")
         return tileMap
@@ -86,7 +85,8 @@ class Map():
         '''
         Loads tile list from tileset
         '''
-        tileLists = []
+        # TODO: One list with offset
+        tileList = {}
         for tilesetData in tilesets:
             try:
                 tilesetImg = pygame.image.load('data/'+tilesetData['image'])
@@ -96,7 +96,7 @@ class Map():
                 sys.exit()
             Debug("Tileset is successfully loaded")
             tilesetWidth,tilesetHeight = tilesetImg.get_size()
-            tileList = []
+            count = tilesetData['firstgid'] - 1
             for tile_y in range(0,
                     int(tilesetHeight/GameConstants.TILESET_TILESIZE)):
                 for tile_x in range(0,
@@ -104,10 +104,10 @@ class Map():
                     rect = (tile_x * GameConstants.TILESET_TILESIZE,
                             tile_y * GameConstants.TILESET_TILESIZE,
                             GameConstants.TILESIZE,GameConstants.TILESIZE)
-                    tileList.append(tilesetImg.subsurface(rect))
-            tileLists.append(tileList)
+                    tileList[count] = tilesetImg.subsurface(rect)
+                    count += 1
             Debug("Tileset list is successfully created")
-        return tileLists
+        return tileList
 
     #-----------------------
     def Notify(self,event):
