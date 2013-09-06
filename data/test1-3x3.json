@@ -10,6 +10,17 @@
          "width":3,
          "x":0,
          "y":0
+        }, 
+        {
+         "data":[0, 0, 0, 0, 1, 1, 0, 1, 1],
+         "height":3,
+         "name":"Tile Layer 2",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":3,
+         "x":0,
+         "y":0
         }],
  "orientation":"orthogonal",
  "properties":
@@ -27,7 +38,7 @@
          "name":"Test",
          "properties":
             {
-
+             "prop1":""
             },
          "spacing":0,
          "tileheight":32,
@@ -42,7 +53,7 @@
          "name":"Test2",
          "properties":
             {
-
+             "prop2":""
             },
          "spacing":0,
          "tileheight":32,

@@ -5,6 +5,7 @@ Created on Sep 1, 2013
 '''
 
 import sys
+import logging
 import json
 import pygame
 from pygame.locals import *
@@ -31,11 +32,19 @@ class Map():
 
         #self.tileMap = [] # Stores Row list
         # TODO: BuildLayers()
+
+        # This is used to store layers built
         self.layers = []
-        self.layers.append(self.Build([1, 3, 5, 8, 72, 66, 15, 71, 17],3)) # Test map
+
+        for l in range(len(tileLayersData)):
+            self.layers.append(
+                    self.Build(tileLayersData[l]['data'],
+                        tileLayersData[l]['width'])) # Test map
+        #self.layers.append(self.Build(tileLayersData[0]['data'],
+        #    tileLayersData[0]['width']))
 
         self.state = Map.STATE_BUILT
-        evManager.Post(Events.MapBuiltEvent(self.layers))
+        evManager.Post(Events.MapBuiltEvent(self))
     #-----------------------
     def Read(self, filename):
         '''
@@ -60,13 +69,13 @@ class Map():
         Reads a list of tiles used, the number of 
         columns of tiles for the width, and construct map
         '''
+        # TODO: Multilayer maps
         rows = int(len(tileMapData) / columns)
         tileMap = []
         for tile_row in range(0,rows):
             row = []
             tileMap.append(row)
             for tile_column in range (0,columns):
-                #TODO: Multitileset support
                 tileMap[tile_row].append(
                         self.tileList[
                             tileMapData[tile_row * columns + tile_column] - 1])
@@ -88,17 +97,20 @@ class Map():
         from different tilesets. Key of tileList
         includes the offset of tileset
         '''
-        # TODO: One list with offset
+        # A dict of tiles available
         tileList = {}
+        # A dict of tile properties
+        tileProp = {}
         for tilesetData in tilesets:
             try:
                 tilesetImg = pygame.image.load('data/'+tilesetData['image'])
             except:
-                print("Error: Tile set file ",tilesetData['image'],"does not exist.")
+                logging.exception("Error: Tile set file \'",tilesetData['image'],"\' does not exist.")
                 pygame.quit()
                 sys.exit()
-            Debug("Tileset is successfully loaded")
+            Debug("Tileset image is successfully loaded")
             tilesetWidth,tilesetHeight = tilesetImg.get_size()
+            # This is the index offset of tileset
             count = tilesetData['firstgid'] - 1
             for tile_y in range(0,
                     int(tilesetHeight/GameConstants.TILESET_TILESIZE)):
@@ -108,7 +120,11 @@ class Map():
                             tile_y * GameConstants.TILESET_TILESIZE,
                             GameConstants.TILESIZE,GameConstants.TILESIZE)
                     tileList[count] = tilesetImg.subsurface(rect)
+                    tileProp[count] = tilesetData['properties']
                     count += 1
+            # When there is no tile, i.e. tile data is 0
+            tileList[-1] = None
+            tileProp[-1] = None
             Debug("Tileset list is successfully created")
         return tileList
 

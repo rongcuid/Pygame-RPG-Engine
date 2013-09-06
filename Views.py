@@ -46,26 +46,21 @@ class PygameView:
         
         self.overlays = pygame.sprite.RenderUpdates()
     #-------------------------------
-    def ShowMap(self, gameMap):
+    def ShowMap(self, gameMap, xoffset=0,yoffset=0):
         # Clear screen
+        mapLayers = gameMap.layers
         self.background.fill((0,0,0))
         self.window.blit( self.background,(0,0))
         pygame.display.flip()
 
-        mapLayer = gameMap[0]
+        #mapLayer = mapLayers[0] # test code
 
         # Draw objects
-        for tile_y in range(0,len(mapLayer)):
-            for tile_x in range(0,len(mapLayer[0])):
-                tile = mapLayer[tile_y][tile_x]
-                overlay = pygame.sprite.Sprite(self.overlays)
-                overlay.image = tile
-                # NOTE: mapLayer is in form [tile_row][tile_column]
-                # so tile_y goes first
-                overlay.rect = tile.get_rect().move(
-                        tile_y * GameConstants.TILESIZE,
-                        tile_x * GameConstants.TILESIZE)
-        # Test code
+        for mapLayer in mapLayers:
+            for tile_y in range(0,len(mapLayer)):
+                for tile_x in range(0,len(mapLayer[0])):
+                    self.DrawTile(tile_x,tile_y,mapLayer)
+       # Test code
         #overlay = pygame.sprite.Sprite(self.overlays)
         #testTile = mapLayer[2][1]
         #overlay.image = testTile
@@ -75,6 +70,16 @@ class PygameView:
         self.overlays.draw(self.window)
         pygame.display.flip()
 
+    #-----------------------------
+    def DrawTile(self,tile_x,tile_y,mapLayer):
+        tile = mapLayer[tile_y][tile_x]
+        if tile: # Makes sure the tile is not None
+            overlay = pygame.sprite.Sprite(self.overlays)
+            overlay.image = tile
+            overlay.rect = tile.get_rect().move(
+                    tile_x * GameConstants.TILESIZE,
+                    tile_y * GameConstants.TILESIZE)
+ 
     #-------------------------------
     def Notify(self,event):
         if isinstance( event, Events.TickEvent ):

@@ -41,12 +41,6 @@ class Game:
 def main():
     evManager = EventManager.EventManager()
     
-    #pygame.init()
-    #DISPLAYSURF = pygame.display.set_mode((640,400))
-    #pygame.display.set_caption('Hello World!')
-    #while True:
-    #    pygame.display.update()
-
     keybd = Controllers.KeyboardController( evManager )
     spinner = Controllers.CPUSpinnerController( evManager )
     pygameView = Views.PygameView( evManager )
