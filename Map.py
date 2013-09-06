@@ -54,10 +54,7 @@ class Map():
         try:
             map_data = json.load(open(filename))
         except:
-            print("Error: Cannot read map data file ",filename)
-            traceback.print_exc(file=sys.stdout)
-            pygame.quit()
-            sys.exit()
+            raise Exception("Error: Cannot read map data file ",filename)
         Debug("Map data ",filename," is successfully read!")
         tileLayersData = map_data['layers']
         tilesetsData = map_data['tilesets']
@@ -105,10 +102,7 @@ class Map():
             try:
                 tilesetImg = pygame.image.load('data/'+tilesetData['image'])
             except:
-                Debug("Error: Tile set file \'",tilesetData['image'],"\' does not exist.")
-                traceback.print_exc(file=sys.stdout)
-                pygame.quit()
-                sys.exit()
+                raise Exception("Error: Tile set file \'",tilesetData['image'],"\' does not exist.")
             Debug("Tileset image is successfully loaded")
             tilesetWidth,tilesetHeight = tilesetImg.get_size()
             # This is the index offset of tileset
