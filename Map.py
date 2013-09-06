@@ -4,8 +4,7 @@ Created on Sep 1, 2013
 @author: carl
 '''
 
-import sys
-import logging
+import sys,traceback
 import json
 import pygame
 from pygame.locals import *
@@ -56,6 +55,7 @@ class Map():
             map_data = json.load(open(filename))
         except:
             print("Error: Cannot read map data file ",filename)
+            traceback.print_exc(file=sys.stdout)
             pygame.quit()
             sys.exit()
         Debug("Map data ",filename," is successfully read!")
@@ -105,7 +105,8 @@ class Map():
             try:
                 tilesetImg = pygame.image.load('data/'+tilesetData['image'])
             except:
-                logging.exception("Error: Tile set file \'",tilesetData['image'],"\' does not exist.")
+                Debug("Error: Tile set file \'",tilesetData['image'],"\' does not exist.")
+                traceback.print_exc(file=sys.stdout)
                 pygame.quit()
                 sys.exit()
             Debug("Tileset image is successfully loaded")
