@@ -47,6 +47,7 @@ class PygameView:
         self.overlays = pygame.sprite.RenderUpdates()
     #-------------------------------
     def ShowMap(self, gameMap, xoffset=0,yoffset=0):
+        # TODO: Offsets
         # Clear screen
         mapLayers = gameMap.layers
         self.background.fill((0,0,0))
