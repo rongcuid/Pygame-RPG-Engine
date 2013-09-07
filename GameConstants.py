@@ -8,14 +8,14 @@ This file stores all global constants in the game
 
 DEBUG = True
 
-LOGICRATE = 30 # Rate of logic calculation
+LOGICRATE = 30  # Rate of logic calculation
 
 DIRECTION_UP = 0
 DIRECTION_DOWN = 1
 DIRECTION_LEFT = 2
 DIRECTION_RIGHT = 3
 
-TILESIZE = 32 # Width and Height of tile
+TILESIZE = 32  # Width and Height of tile
 # TODO: Read from json map file
-TILESET_TILESIZE = 32 # Width/Height if a tile in tileset
-TILESET_SPACING = 0 # Spacing between tiles
+TILESET_TILESIZE = 32  # Width/Height if a tile in tileset
+TILESET_SPACING = 0  # Spacing between tiles
