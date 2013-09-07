@@ -1,5 +1,9 @@
 import GameConstants
-def Debug( msg ):
-    if GameConstants.DEBUG:
-        print('[Debug]',msg)
 
+
+def Debug(*msgs):
+    if GameConstants.DEBUG:
+        print("[Debug] ", end="")
+        for msg in msgs:
+            print(msg, end="")
+        print()

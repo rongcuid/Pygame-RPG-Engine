@@ -17,7 +17,10 @@ import Views
 import Map
 
 #--------------------------------------
+
+
 class Game:
+
     '''
     Main game class
     '''
@@ -28,30 +31,27 @@ class Game:
     #-----------------
     def __init__(self, evManager):
         self.evManager = evManager
-        self.evManager.RegisterListener( self )
+        self.evManager.RegisterListener(self)
 
         self.state = Game.STATE_PREPARING
-        
-        self.map = Map.Map( evManager ) 
+
+        self.map = Map.Map(evManager)
     #----------------
+
     def Notify(self, event):
         pass
 
 #---------------------------------------
+
+
 def main():
     evManager = EventManager.EventManager()
-    
-    #pygame.init()
-    #DISPLAYSURF = pygame.display.set_mode((640,400))
-    #pygame.display.set_caption('Hello World!')
-    #while True:
-    #    pygame.display.update()
 
-    keybd = Controllers.KeyboardController( evManager )
-    spinner = Controllers.CPUSpinnerController( evManager )
-    pygameView = Views.PygameView( evManager )
+    keybd = Controllers.KeyboardController(evManager)
+    spinner = Controllers.CPUSpinnerController(evManager)
+    pygameView = Views.PygameView(evManager)
 
-    game = Game( evManager )
+    game = Game(evManager)
     spinner.Run()
 
 

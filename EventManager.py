@@ -9,25 +9,27 @@ from Debug import Debug
 
 
 class EventManager():
+
     '''
     This class manages all events in the game
     It connects the model-view-control part of the game
     '''
+
     def __init__(self):
         import weakref
         self.listeners = weakref.WeakKeyDictionary()
         self.eventQueue = []
         self.listenersToAdd = []
         self.listenersToRemove = []
-        
+
     # ------------------
-    def RegisterListener(self,listener):
+    def RegisterListener(self, listener):
         self.listenersToAdd.append(listener)
-    
+
     #-------------------
-    def UnregisterListener(self,listener):
+    def UnregisterListener(self, listener):
         self.listenersToRemove.append(listener)
-    
+
     # -------------------
     def UpdateListeners(self):
         '''
@@ -40,9 +42,9 @@ class EventManager():
                 del self.listeners[l]
         self.listenersToAdd = []
         self.listenersToRemove = []
-    
+
     #------------------
-    def Post(self,event):
+    def Post(self, event):
         '''
         Add an event to queue
         '''
@@ -51,8 +53,8 @@ class EventManager():
             self.UpdateListeners()
             self.ConsumeEventQueue()
         elif not isinstance(event, Events.LogicTickEvent):
-            Debug("Message: "+event.name)
-    
+            Debug("Message: " + event.name)
+
     # ------
     def ConsumeEventQueue(self):
         i = 0
@@ -65,5 +67,3 @@ class EventManager():
             if self.listenersToAdd:
                 self.UpdateListeners()
         self.eventQueue = []
-
-        
