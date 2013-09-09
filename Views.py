@@ -31,16 +31,7 @@ class PygameView:
         # self.window.fill((255,255,255))
         pygame.display.set_caption('Test Game')
         self.background = pygame.Surface(self.window.get_size())
-        self.background.fill((0, 255, 0))
-        # Test
-        font = pygame.font.Font(None, 30)
-        text = "Test Text"
-        textImg = font.render(text, 1, (255, 0, 0))
-        self.background.blit(textImg, (0, 0))
-
-        #testTilesetImg = pygame.image.load('data/test1_tileset.png')
-        #testTile = testTilesetImg.subsurface(0,0,32,32)
-        #self.background.blit( testTile, (0,0) )
+        self.background.fill((0, 0, 0))
         #-----------
 
         self.window.blit(self.background, (0, 0))
