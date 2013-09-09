@@ -30,11 +30,7 @@ class Map():
         self.state = Map.STATE_PREPARING
 
         tileLayersData, tilesetsData = self.Read('data/test1-3x3.json')
-        #self.tilesets = ['data/test1_tileset.png']
-        self.tileList = self.LoadTileList(tilesetsData)
-
-        # self.tileMap = [] # Stores Row list
-        # TODO: BuildLayers()
+        self.tileList,self.tileProp = self.LoadTileList(tilesetsData)
 
         # This is used to store layers built
         self.layers = []
@@ -128,9 +124,10 @@ class Map():
                     count += 1
             # When there is no tile, i.e. tile data is 0
             tileList[-1] = None
-            tileProp[-1] = None
             Debug("Tileset list is successfully created")
-        return tileList
+            tileProp[-1] = None
+            Debug("Tileset property is successfully created")
+        return [tileList,tileProp]
 
     #-----------------------
     def Notify(self, event):
