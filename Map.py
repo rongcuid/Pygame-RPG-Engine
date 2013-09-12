@@ -82,15 +82,6 @@ class Map():
         return tileMap
     #-----------------------
 
-    def CanMove(self, tileX, tileY, direction):
-        '''
-        @return: Returns if charactor can move in certain
-        direction on tile (tileX,tileY)
-        '''
-        # TODO: Implement this
-        pass
-    #-----------------------
-
     def LoadTileList(self, tilesets):
         '''
         Loads tile list from tileset. 
