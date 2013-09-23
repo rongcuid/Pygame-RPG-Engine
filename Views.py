@@ -41,7 +41,7 @@ class PygameView:
     #-------------------------------
 
     def ShowMap(self, gameMap, xoffset=0, yoffset=0):
-        # TODO: Offsets
+        # TODO: Offsets, or Camera
         # Clear screen
         mapLayers = gameMap.GetLayers()
         self.background.fill((0, 0, 0))
