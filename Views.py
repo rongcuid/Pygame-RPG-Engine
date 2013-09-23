@@ -43,24 +43,16 @@ class PygameView:
     def ShowMap(self, gameMap, xoffset=0, yoffset=0):
         # TODO: Offsets
         # Clear screen
-        mapLayers = gameMap.layers
+        mapLayers = gameMap.GetLayers()
         self.background.fill((0, 0, 0))
         self.window.blit(self.background, (0, 0))
         pygame.display.flip()
-
-        # mapLayer = mapLayers[0] # test code
 
         # Draw objects
         for mapLayer in mapLayers:
             for tile_y in range(0, len(mapLayer)):
                 for tile_x in range(0, len(mapLayer[0])):
                     self.DrawTile(tile_x, tile_y, mapLayer)
-       # Test code
-        #overlay = pygame.sprite.Sprite(self.overlays)
-        #testTile = mapLayer[2][1]
-        #overlay.image = testTile
-        #overlay.rect = testTile.get_rect().move(16,16)
-        # -----------
         self.window.blit(self.background, (0, 0))
         self.overlays.draw(self.window)
         pygame.display.flip()

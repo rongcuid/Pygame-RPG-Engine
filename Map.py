@@ -38,12 +38,24 @@ class Map():
         for l in range(len(tileLayersData)):
             self.layers.append(
                 self.Build(tileLayersData[l]['data'],
-                           tileLayersData[l]['width']))  # Test map
-        # self.layers.append(self.Build(tileLayersData[0]['data'],
-        #    tileLayersData[0]['width']))
+                           tileLayersData[l]['width']))  
+
+
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self))
+    #-----------------------
+    def GetLayers(self):
+        layers = []
+        for l in self.layers:
+            layers.append(l[0])
+        return layers
+    #-----------------------
+    def GetLayerProps(self):
+        props = []
+        for l in self.layers:
+            props.append(l[1])
+        return props
     #-----------------------
 
     def Read(self, filename):
@@ -51,7 +63,6 @@ class Map():
         This function reads map data from a Json file
         @return: [tileLayersData,tilesetsData]
         '''
-        # TODO: Now one layer only
         try:
             map_data = json.load(open(filename))
         except:
@@ -68,18 +79,25 @@ class Map():
         Reads a list of tiles used, the number of 
         columns of tiles for the width, and construct map
         '''
-        # TODO: Multilayer maps
         rows = int(len(tileMapData) / columns)
         tileMap = []
+        tilePropMap = []
         for tile_row in range(0, rows):
-            row = []
-            tileMap.append(row)
+            tileMap.append([])
+            tilePropMap.append([])
             for tile_column in range(0, columns):
+                # Retrieve tile address in tileset from tileMapData, read the tile from tileList,
+                # then assign that to the corresponding entry in tileMap
                 tileMap[tile_row].append(
                     self.tileList[
                         tileMapData[tile_row * columns + tile_column] - 1])
+                # Retrieve tile address in tileset from tileMapData, read property from tileProp,
+                # then assign that to corresponding entry in tilePropMap
+                tilePropMap[tile_row].append(
+                        self.tileProp[
+                            tileMapData[tile_row * columns + tile_column] - 1])
         Debug("Tile map initialized")
-        return tileMap
+        return [tileMap,tilePropMap]
     #-----------------------
 
     def LoadTileList(self, tilesets):
