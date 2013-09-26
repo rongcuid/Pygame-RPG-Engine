@@ -42,8 +42,10 @@ class Map():
                 self.Build(tileLayersData[l]['data'],
                            tileLayersData[l]['width']))  
 
-        self.sectors = []
-        self.SetupSectors(self.layers)
+        self.sectors = self.SetupSectors(self.layers)
+
+        # Test CanMove
+        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_UP))
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self))
@@ -146,6 +148,38 @@ class Map():
             for col in range(self.size[0]):
                 sectors[col][row] = Sector(self.evManager)
 
+        for col in range(len(sectors)):
+            for row in range(col):
+                # Set Properties
+                prop = []
+                for l in layers:
+                    prop.append(l[1][row][col]) # Note: row and col is different
+                # Set Neighbors
+                up=None
+                down=None
+                left=None
+                right=None
+                if row == 0:
+                    up = None
+                else:
+                    up = sectors[col][row - 1]
+                try:
+                    # When IndexError occur, sector is out of map
+                    down = sectors[col][row + 1]
+                except IndexError:
+                    down = None
+                if col == 0:
+                    left = None
+                else:
+                    left = sectors[col - 1][row]
+                try:
+                    right = sectors[col + 1][row]
+                except IndexError:
+                    right = None
+                sectors[col][row].SetNeighbors([up,down,left,right])
+                sectors[col][row].SetProperties(prop)
+        return sectors
+                    
     def Notify(self, event):
         '''
         NOTE: should use imported event lists for levels
@@ -170,6 +204,32 @@ class Sector:
         self.neighbors[GameConstants.DIRECTION_LEFT] = None
         self.neighbors[GameConstants.DIRECTION_RIGHT] = None
 
-        self.properties = []
+        self.properties = {}
+
+    def SetNeighbors(self, neighbors=[None,None,None,None]):
+        '''
+        Set the neighbor sectors.
+        @type neighbors: List, [UP,DOWN,LEFT,RIGHT]
+        '''
+        self.neighbors = list(neighbors) # Copy the list
+
+    def SetNeighbor(self, neighbor, direction):
+        '''
+        Set neighbor on one direction
+        '''
+        self.neighbors[direction] = neighbor
+
+    def SetProperties(self, properties):
+        '''
+        Sets the properties
+        @type properties: List
+        '''
+        if properties != None:
+            for prop in properties:
+                if prop != None:
+                    self.properties.update(prop)
+
+
     def CanMove(self, direction):
-        pass
+        return neighbor[direction] != None and \
+                neighbor[direction].properties['Obstacle'] != 'True'
