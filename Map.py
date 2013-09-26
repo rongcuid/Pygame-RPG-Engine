@@ -23,14 +23,14 @@ class Map():
     STATE_PREPARING = 'Preparing'
     STATE_BUILT = 'Built'
 
-    def __init__(self, evManager):
+    def __init__(self, map_file, evManager):
         self.evManager = evManager
         self.evManager.RegisterListener(self)
 
         self.state = Map.STATE_PREPARING
 
-        tileLayersData, tilesetsData = self.Read('data/test1-3x3.json')
-        self.tileList,self.tileProp = self.LoadTileList(tilesetsData)
+        tileLayersData, tilesetsData = self.Read(map_file)
+        self.tileList,self.tileProp = self.LoadTileList(tilesetsData, GameConstants.TILESET_TILESIZE, GameConstants.TILESIZE, GameConstants.TILESET_SPACING)
 
         # This is used to store layers built
         self.layers = []
@@ -100,7 +100,7 @@ class Map():
         return [tileMap,tilePropMap]
     #-----------------------
 
-    def LoadTileList(self, tilesets):
+    def LoadTileList(self, tilesets, tileset_tilesize, tilesize,spacing):
         '''
         Loads tile list from tileset. 
         Iterates through tilesets to make tile lists
@@ -122,12 +122,12 @@ class Map():
             # This is the index offset of tileset
             count = tilesetData['firstgid'] - 1
             for tile_y in range(0,
-                                int(tilesetHeight / GameConstants.TILESET_TILESIZE)):
+                                int(tilesetHeight / tileset_tilesize)):
                 for tile_x in range(0,
-                                    int(tilesetWidth / GameConstants.TILESET_TILESIZE)):
-                    rect = (tile_x * GameConstants.TILESET_TILESIZE,
-                            tile_y * GameConstants.TILESET_TILESIZE,
-                            GameConstants.TILESIZE, GameConstants.TILESIZE)
+                                    int(tilesetWidth / tileset_tilesize)):
+                    rect = (tile_x * tileset_tilesize + (tile_x+1)*spacing,
+                            tile_y * tileset_tilesize + (tile_y+1)*spacing,
+                            tilesize, tilesize)
                     tileList[count] = tilesetImg.subsurface(rect)
                     tileProp[count] = tilesetData['properties']
                     count += 1
