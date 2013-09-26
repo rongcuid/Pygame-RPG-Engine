@@ -46,6 +46,9 @@ class Map():
 
         # Test CanMove
         print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_UP))
+        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_DOWN))
+        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_LEFT))
+        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_RIGHT))
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self))
@@ -149,7 +152,7 @@ class Map():
                 sectors[col][row] = Sector(self.evManager)
 
         for col in range(len(sectors)):
-            for row in range(col):
+            for row in range(len(sectors[0])):
                 # Set Properties
                 prop = []
                 for l in layers:
@@ -231,5 +234,5 @@ class Sector:
 
 
     def CanMove(self, direction):
-        return neighbor[direction] != None and \
-                neighbor[direction].properties['Obstacle'] != 'True'
+        return self.neighbors[direction] != None and \
+                self.neighbors[direction].properties.get('Obstacle') != 'True'
