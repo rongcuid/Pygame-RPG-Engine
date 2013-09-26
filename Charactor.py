@@ -43,7 +43,10 @@ class Charactor:
     def __init__(self, evManager):
         self.evManager = evManager
         self.evManager.RegisterListener(self)
+        # This is a tile data
         self.sector = None
+        # This is the coordinate
+        self.coordinate = (None,None)
     # --------------------
 
     def Move(self, direction):
@@ -56,10 +59,9 @@ class Charactor:
 
     #------------------------------
     def Place(self, sector):
-        pass
-        #self.sector = sector
-        #ev = Events.CharactorPlaceEvent(self)
-        #self.evManager.Post(ev)
+        self.sector = sector
+        ev = Events.CharactorPlaceEvent(self)
+        self.evManager.Post(ev)
 
     #--------------------------
     def Notify(self, event):
