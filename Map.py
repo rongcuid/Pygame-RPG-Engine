@@ -44,11 +44,12 @@ class Map():
 
         self.sectors = self.SetupSectors(self.layers)
 
-        # Test CanMove
-        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_UP))
-        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_DOWN))
-        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_LEFT))
-        print(self.sectors[0][0].CanMove(GameConstants.DIRECTION_RIGHT))
+        # Test CanMove. Note: Test finished
+        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_UP))
+        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_DOWN))
+        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_LEFT))
+        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_RIGHT))
+        # ------
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self))
