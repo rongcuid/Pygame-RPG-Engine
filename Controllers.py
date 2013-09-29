@@ -69,6 +69,7 @@ class CPUSpinnerController():
             if self.OneSecPassed(prevTick):
                 self.evManager.Post(Events.SecondEvent())
             prevTick = pygame.time.get_ticks()
+            #pygame.time.Clock().tick(100)
 
     #----------------------------
     def OneSecPassed(self, prevTick):
@@ -76,7 +77,7 @@ class CPUSpinnerController():
     #----------------------------
 
     def IntervalPassed(self, prevTick, interval):
-        # Returns true when interval milliseconds passed
+        ''' Returns true when interval milliseconds passed '''
         return pygame.time.get_ticks() % interval < prevTick % interval
     #---------------------------
 

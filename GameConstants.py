@@ -22,4 +22,4 @@ TILESIZE = 32  # Width and Height of tile
 TILESET_TILESIZE = 32  # Width/Height if a tile in tileset
 TILESET_SPACING = 1  # Spacing between tiles
 
-TEST_LEVEL_MAP = 'data/test1-5x5.json'
+TEST_LEVEL_MAP = 'data/desert.json'
