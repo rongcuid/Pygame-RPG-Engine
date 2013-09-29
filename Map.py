@@ -30,7 +30,7 @@ class Map():
         self.state = Map.STATE_PREPARING
 
         tileLayersData, tilesetsData = self.Read(map_file)
-        self.tileList,self.tileProp = self.LoadTileList(tilesetsData, GameConstants.TILESET_TILESIZE, GameConstants.TILESIZE, GameConstants.TILESET_SPACING,1)
+        self.tileList,self.tileProp = self.LoadTileList(tilesetsData)
 
         # This is used to store layers built
         self.layers = []
@@ -106,7 +106,7 @@ class Map():
         Debug("Tile map initialized")
         return [tileMap,tilePropMap]
 
-    def LoadTileList(self, tilesets, tileset_tilesize, tilesize,spacing,margin):
+    def LoadTileList(self, tilesets):
         '''
         Loads tile list from tileset. 
         Iterates through tilesets to make tile lists
@@ -124,6 +124,9 @@ class Map():
                 raise Exception(
                     "Error: Tile set file \'", tilesetData['image'], "\' does not exist.")
             Debug("Tileset image is successfully loaded")
+            spacing = tilesetData['spacing']
+            margin = tilesetData['margin']
+            tileset_tilesize = tilesetData['tilewidth']
             tilesetWidth, tilesetHeight = tilesetImg.get_size()
             # This is the index offset of tileset
             count = tilesetData['firstgid'] - 1
@@ -133,7 +136,7 @@ class Map():
                                     int(tilesetWidth / tileset_tilesize)):
                     rect = (tile_x * tileset_tilesize + (tile_x+margin)*spacing,
                             tile_y * tileset_tilesize + (tile_y+margin)*spacing,
-                            tilesize, tilesize)
+                            tileset_tilesize, tileset_tilesize)
                     tileList[count] = tilesetImg.subsurface(rect)
                     tileProp[count] = tilesetData['properties']
                     count += 1
