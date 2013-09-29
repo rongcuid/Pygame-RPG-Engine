@@ -30,26 +30,28 @@ class Map():
         self.state = Map.STATE_PREPARING
 
         tileLayersData, tilesetsData = self.Read(map_file)
-        self.tileList,self.tileProp = self.LoadTileSet(tilesetsData)
+        self.tileList, self.tileProp = self.LoadTileSet(tilesetsData)
 
         # This is used to store layers built
         self.layers = []
 
-        self.size = (tileLayersData[0]['width'],tileLayersData[0]['height'])
+        self.size = (tileLayersData[0]['width'], tileLayersData[0]['height'])
 
         for l in range(len(tileLayersData)):
             self.layers.append(
-                self.Build(tileLayersData[l]))  
+                self.Build(tileLayersData[l]))
 
         self.sectors = self.SetupSectors(self.layers)
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self))
+
     def GetLayers(self):
         layers = []
         for l in self.layers:
             layers.append(l[0])
         return layers
+
     def GetLayerProps(self):
         props = []
         for l in self.layers:
@@ -80,7 +82,7 @@ class Map():
         columns = tileMapData['width']
         alpha = int(tileMapData['opacity'] * 255)
         rows = int(len(data) / columns)
-        assert rows * columns == len(data) # Make sure number is correct
+        assert rows * columns == len(data)  # Make sure number is correct
         tileMap = []
         tilePropMap = []
         for tile_row in range(0, rows):
@@ -93,15 +95,15 @@ class Map():
                 # Retrieve tile address in tileset from data, read the tile from tileList,
                 # then assign that to the corresponding entry in tileMap
                 tileMap[tile_row][tile_column] = self.tileList[
-                            data[tile_row * columns + tile_column] - 1]
+                    data[tile_row * columns + tile_column] - 1]
                 if tileMap[tile_row][tile_column] != None:
                     tileMap[tile_row][tile_column].set_alpha(alpha)
                 # Retrieve tile address in tileset from data, read property from tileProp,
                 # then assign that to corresponding entry in tilePropMap
                 tilePropMap[tile_row][tile_column] = self.tileProp[
-                            data[tile_row * columns + tile_column] - 1]
+                    data[tile_row * columns + tile_column] - 1]
         Debug("Tile map initialized")
-        return [tileMap,tilePropMap]
+        return [tileMap, tilePropMap]
 
     def LoadTileSet(self, tilesets):
         '''
@@ -132,9 +134,12 @@ class Map():
                                 int(tilesetHeight / tileset_tilesize)):
                 for tile_x in range(0,
                                     int(tilesetWidth / tileset_tilesize)):
-                    rect = (tile_x * tileset_tilesize + (tile_x+margin)*spacing,
-                            tile_y * tileset_tilesize + (tile_y+margin)*spacing,
-                            tileset_tilesize, tileset_tilesize)
+                    rect = (
+                        tile_x * tileset_tilesize +
+                        (tile_x + margin) * spacing,
+                        tile_y * tileset_tilesize +
+                        (tile_y + margin) * spacing,
+                        tileset_tilesize, tileset_tilesize)
                     tileList[count] = tilesetImg.subsurface(rect)
                     tileProp[count] = tilesetData['properties']
                     count += 1
@@ -143,8 +148,8 @@ class Map():
             Debug("Tileset list is successfully created")
             tileProp[-1] = None
             Debug("Tileset property is successfully created")
-        return [tileList,tileProp]
-    
+        return [tileList, tileProp]
+
     def SetupSectors(self, layers):
         sectors = list(range(self.size[0]))
         for s in range(len(sectors)):
@@ -158,12 +163,13 @@ class Map():
                 # Set Properties
                 prop = []
                 for l in layers:
-                    prop.append(l[1][row][col]) # Note: row and col is different
+                    # Note: row and col is different
+                    prop.append(l[1][row][col])
                 # Set Neighbors
-                up=None
-                down=None
-                left=None
-                right=None
+                up = None
+                down = None
+                left = None
+                right = None
                 if row == 0:
                     up = None
                 else:
@@ -181,10 +187,10 @@ class Map():
                     right = sectors[col + 1][row]
                 except IndexError:
                     right = None
-                sectors[col][row].SetNeighbors([up,down,left,right])
+                sectors[col][row].SetNeighbors([up, down, left, right])
                 sectors[col][row].SetProperties(prop)
         return sectors
-                    
+
     def Notify(self, event):
         '''
         NOTE: should use imported event lists for levels
@@ -193,11 +199,13 @@ class Map():
 
 
 class Sector:
+
     '''
     A sector stores some information of a certain tile,
     including but not limited to:
     neighbor sectors, properties
     '''
+
     def __init__(self, evManager):
         '''
         Initiates a sector
@@ -211,12 +219,12 @@ class Sector:
 
         self.properties = {}
 
-    def SetNeighbors(self, neighbors=[None,None,None,None]):
+    def SetNeighbors(self, neighbors=[None, None, None, None]):
         '''
         Set the neighbor sectors.
         @type neighbors: List, [UP,DOWN,LEFT,RIGHT]
         '''
-        self.neighbors = list(neighbors) # Copy the list
+        self.neighbors = list(neighbors)  # Copy the list
 
     def SetNeighbor(self, neighbor, direction):
         '''
@@ -234,7 +242,6 @@ class Sector:
                 if prop != None:
                     self.properties.update(prop)
 
-
     def CanMove(self, direction):
         return self.neighbors[direction] != None and \
-                self.neighbors[direction].properties.get('Obstacle') != 'True'
+            self.neighbors[direction].properties.get('Obstacle') != 'True'

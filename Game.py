@@ -35,7 +35,7 @@ class Game:
 
         self.state = Game.STATE_PREPARING
 
-        self.map = Map.Map(GameConstants.TEST_LEVEL_MAP,evManager)
+        self.map = Map.Map(GameConstants.TEST_LEVEL_MAP, evManager)
     #----------------
 
     def Notify(self, event):

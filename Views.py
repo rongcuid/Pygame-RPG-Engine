@@ -66,8 +66,8 @@ class PygameView:
     def DrawTile(self, tile_x, tile_y, mapLayer):
         tile = mapLayer[tile_y][tile_x]
         if tile:  # Makes sure the tile is not None
-            self.background.blit(tile,(tile_x*GameConstants.TILESIZE,tile_y*GameConstants.TILESIZE))
-        
+            self.background.blit(
+                tile, (tile_x * GameConstants.TILESIZE, tile_y * GameConstants.TILESIZE))
 
     #-------------------------------
     def Notify(self, event):

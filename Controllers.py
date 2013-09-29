@@ -69,7 +69,7 @@ class CPUSpinnerController():
             if self.OneSecPassed(prevTick):
                 self.evManager.Post(Events.SecondEvent())
             prevTick = pygame.time.get_ticks()
-            #pygame.time.Clock().tick(100)
+            # pygame.time.Clock().tick(100)
 
     #----------------------------
     def OneSecPassed(self, prevTick):

@@ -10,7 +10,7 @@ DEBUG = True
 
 LOGICRATE = 30  # Rate of logic calculation
 
-WINDOWSIZE = (800,600)
+WINDOWSIZE = (800, 600)
 
 DIRECTION_UP = 0
 DIRECTION_DOWN = 1

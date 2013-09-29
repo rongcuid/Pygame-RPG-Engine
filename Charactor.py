@@ -46,12 +46,12 @@ class Charactor:
         # This is a tile data
         self.sector = None
         # This is the coordinate
-        self.coordinate = (None,None)
+        self.coordinate = (None, None)
     # --------------------
 
     def Move(self, direction):
         pass
-        #if self.sector.MovePossible(direction):
+        # if self.sector.MovePossible(direction):
         #    newSector = self.sector.neighbors[direction]
         #    self.sector = newSector
         #    ev = Events.CharactorMoveEvent(self)
@@ -66,8 +66,8 @@ class Charactor:
     #--------------------------
     def Notify(self, event):
         pass
-        #if isinstance(event, Events.GameStartedEvent):
+        # if isinstance(event, Events.GameStartedEvent):
         #    gameMap = event.game.map
         #    self.Place(gameMap.sectors[gameMap.startSectorIndex])
-        #elif isinstance(event, Events.CharactorMoveRequest):
+        # elif isinstance(event, Events.CharactorMoveRequest):
         #    self.Move(event.direction)
