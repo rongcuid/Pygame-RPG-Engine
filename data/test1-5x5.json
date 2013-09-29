@@ -15,7 +15,7 @@
          "data":[0, 0, 0, 0, 0, 0, 73, 73, 73, 0, 0, 73, 73, 73, 0, 0, 73, 73, 73, 0, 0, 0, 0, 0, 0],
          "height":5,
          "name":"Tile Layer 2",
-         "opacity":1,
+         "opacity":0.439999997615814,
          "type":"tilelayer",
          "visible":true,
          "width":5,

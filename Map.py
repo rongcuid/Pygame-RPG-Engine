@@ -30,7 +30,7 @@ class Map():
         self.state = Map.STATE_PREPARING
 
         tileLayersData, tilesetsData = self.Read(map_file)
-        self.tileList,self.tileProp = self.LoadTileList(tilesetsData)
+        self.tileList,self.tileProp = self.LoadTileSet(tilesetsData)
 
         # This is used to store layers built
         self.layers = []
@@ -39,17 +39,9 @@ class Map():
 
         for l in range(len(tileLayersData)):
             self.layers.append(
-                self.Build(tileLayersData[l]['data'],
-                           tileLayersData[l]['width']))  
+                self.Build(tileLayersData[l]))  
 
         self.sectors = self.SetupSectors(self.layers)
-
-        # Test CanMove. Note: Test finished
-        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_UP))
-        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_DOWN))
-        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_LEFT))
-        #print(self.sectors[39][39].CanMove(GameConstants.DIRECTION_RIGHT))
-        # ------
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self))
@@ -79,34 +71,39 @@ class Map():
 
         return [tileLayersData, tilesetsData]
 
-    def Build(self, tileMapData, columns):
+    def Build(self, tileMapData):
         '''
         Reads a list of tiles used, the number of 
         columns of tiles for the width, and construct map
         '''
-        rows = int(len(tileMapData) / columns)
-        assert rows * columns == len(tileMapData) # Make sure number is correct
+        data = tileMapData['data']
+        columns = tileMapData['width']
+        alpha = int(tileMapData['opacity'] * 255)
+        rows = int(len(data) / columns)
+        assert rows * columns == len(data) # Make sure number is correct
         tileMap = []
         tilePropMap = []
         for tile_row in range(0, rows):
             tileMap.append([])
             tilePropMap.append([])
             for tile_column in range(0, columns):
-                # Initialize properties
+                # Initialize lists
+                tileMap[tile_row].append([])
                 tilePropMap[tile_row].append([])
-                # Retrieve tile address in tileset from tileMapData, read the tile from tileList,
+                # Retrieve tile address in tileset from data, read the tile from tileList,
                 # then assign that to the corresponding entry in tileMap
-                tileMap[tile_row].append(
-                    self.tileList[
-                        tileMapData[tile_row * columns + tile_column] - 1])
-                # Retrieve tile address in tileset from tileMapData, read property from tileProp,
+                tileMap[tile_row][tile_column] = self.tileList[
+                            data[tile_row * columns + tile_column] - 1]
+                if tileMap[tile_row][tile_column] != None:
+                    tileMap[tile_row][tile_column].set_alpha(alpha)
+                # Retrieve tile address in tileset from data, read property from tileProp,
                 # then assign that to corresponding entry in tilePropMap
                 tilePropMap[tile_row][tile_column] = self.tileProp[
-                            tileMapData[tile_row * columns + tile_column] - 1]
+                            data[tile_row * columns + tile_column] - 1]
         Debug("Tile map initialized")
         return [tileMap,tilePropMap]
 
-    def LoadTileList(self, tilesets):
+    def LoadTileSet(self, tilesets):
         '''
         Loads tile list from tileset. 
         Iterates through tilesets to make tile lists
@@ -123,6 +120,7 @@ class Map():
             except:
                 raise Exception(
                     "Error: Tile set file \'", tilesetData['image'], "\' does not exist.")
+            tilesetImg = tilesetImg.convert()
             Debug("Tileset image is successfully loaded")
             spacing = tilesetData['spacing']
             margin = tilesetData['margin']

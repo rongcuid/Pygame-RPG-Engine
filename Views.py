@@ -41,7 +41,6 @@ class PygameView:
         self.window.blit(self.background, (0, 0))
         pygame.display.flip()
 
-        self.overlays = pygame.sprite.RenderUpdates()
     #-------------------------------
 
     def ShowMap(self, gameMap, xoffset=0, yoffset=0):
@@ -60,7 +59,6 @@ class PygameView:
                     self.DrawTile(tile_x, tile_y, mapLayer)
 
         self.window.blit(self.background, (0, 0))
-        self.overlays.draw(self.window)
         pygame.display.flip()
         self.state = self.STATE_IDLE
 
@@ -75,7 +73,6 @@ class PygameView:
     def Notify(self, event):
         if isinstance(event, Events.TickEvent):
             if self.state == self.STATE_IDLE:
-                self.overlays.draw(self.window)
                 pygame.display.flip()
         elif isinstance(event, Events.MapBuiltEvent):
             gameMap = event.map
