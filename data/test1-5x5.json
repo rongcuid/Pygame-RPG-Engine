@@ -1,0 +1,80 @@
+{ "height":5,
+ "layers":[
+        {
+         "data":[55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55, 55],
+         "height":5,
+         "name":"Tile Layer 1",
+         "opacity":1,
+         "type":"tilelayer",
+         "visible":true,
+         "width":5,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "data":[0, 0, 0, 0, 0, 0, 73, 73, 73, 0, 0, 73, 73, 73, 0, 0, 73, 73, 73, 0, 0, 0, 0, 0, 0],
+         "height":5,
+         "name":"Tile Layer 2",
+         "opacity":0.449999988079071,
+         "type":"tilelayer",
+         "visible":true,
+         "width":5,
+         "x":0,
+         "y":0
+        }],
+ "orientation":"orthogonal",
+ "properties":
+    {
+
+    },
+ "tileheight":32,
+ "tilesets":[
+        {
+         "firstgid":1,
+         "image":"test1_tileset.png",
+         "imageheight":217,
+         "imagewidth":192,
+         "margin":0,
+         "name":"Test",
+         "properties":
+            {
+             "prop1":""
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "firstgid":37,
+         "image":"test1_tileset.png",
+         "imageheight":217,
+         "imagewidth":192,
+         "margin":0,
+         "name":"Test2",
+         "properties":
+            {
+             "prop2":""
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "firstgid":73,
+         "image":"obstacle_32x32_sp0_mar0.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"Tile 2",
+         "properties":
+            {
+
+            },
+         "spacing":0,
+         "tileheight":32,
+         "tilewidth":32
+        }],
+ "tilewidth":32,
+ "version":1,
+ "width":5
+}

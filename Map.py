@@ -23,39 +23,44 @@ class Map():
     STATE_PREPARING = 'Preparing'
     STATE_BUILT = 'Built'
 
-    def __init__(self, evManager):
+    def __init__(self, map_file, evManager):
         self.evManager = evManager
         self.evManager.RegisterListener(self)
 
         self.state = Map.STATE_PREPARING
 
-        tileLayersData, tilesetsData = self.Read('data/test1-3x3.json')
-        #self.tilesets = ['data/test1_tileset.png']
-        self.tileList = self.LoadTileList(tilesetsData)
-
-        # self.tileMap = [] # Stores Row list
-        # TODO: BuildLayers()
+        tileLayersData, tilesetsData = self.Read(map_file)
+        self.tileList,self.tileProp = self.LoadTileSet(tilesetsData)
 
         # This is used to store layers built
         self.layers = []
 
+        self.size = (tileLayersData[0]['width'],tileLayersData[0]['height'])
+
         for l in range(len(tileLayersData)):
             self.layers.append(
-                self.Build(tileLayersData[l]['data'],
-                           tileLayersData[l]['width']))  # Test map
-        # self.layers.append(self.Build(tileLayersData[0]['data'],
-        #    tileLayersData[0]['width']))
+                self.Build(tileLayersData[l]))  
+
+        self.sectors = self.SetupSectors(self.layers)
 
         self.state = Map.STATE_BUILT
         evManager.Post(Events.MapBuiltEvent(self))
-    #-----------------------
+    def GetLayers(self):
+        layers = []
+        for l in self.layers:
+            layers.append(l[0])
+        return layers
+    def GetLayerProps(self):
+        props = []
+        for l in self.layers:
+            props.append(l[1])
+        return props
 
     def Read(self, filename):
         '''
         This function reads map data from a Json file
         @return: [tileLayersData,tilesetsData]
         '''
-        # TODO: Now one layer only
         try:
             map_data = json.load(open(filename))
         except:
@@ -65,37 +70,40 @@ class Map():
         tilesetsData = map_data['tilesets']
 
         return [tileLayersData, tilesetsData]
-    #-----------------------
 
-    def Build(self, tileMapData, columns):
+    def Build(self, tileMapData):
         '''
         Reads a list of tiles used, the number of 
         columns of tiles for the width, and construct map
         '''
-        # TODO: Multilayer maps
-        rows = int(len(tileMapData) / columns)
+        data = tileMapData['data']
+        columns = tileMapData['width']
+        alpha = int(tileMapData['opacity'] * 255)
+        rows = int(len(data) / columns)
+        assert rows * columns == len(data) # Make sure number is correct
         tileMap = []
+        tilePropMap = []
         for tile_row in range(0, rows):
-            row = []
-            tileMap.append(row)
+            tileMap.append([])
+            tilePropMap.append([])
             for tile_column in range(0, columns):
-                tileMap[tile_row].append(
-                    self.tileList[
-                        tileMapData[tile_row * columns + tile_column] - 1])
+                # Initialize lists
+                tileMap[tile_row].append([])
+                tilePropMap[tile_row].append([])
+                # Retrieve tile address in tileset from data, read the tile from tileList,
+                # then assign that to the corresponding entry in tileMap
+                tileMap[tile_row][tile_column] = self.tileList[
+                            data[tile_row * columns + tile_column] - 1]
+                if tileMap[tile_row][tile_column] != None:
+                    tileMap[tile_row][tile_column].set_alpha(alpha)
+                # Retrieve tile address in tileset from data, read property from tileProp,
+                # then assign that to corresponding entry in tilePropMap
+                tilePropMap[tile_row][tile_column] = self.tileProp[
+                            data[tile_row * columns + tile_column] - 1]
         Debug("Tile map initialized")
-        return tileMap
-    #-----------------------
+        return [tileMap,tilePropMap]
 
-    def CanMove(self, tileX, tileY, direction):
-        '''
-        @return: Returns if charactor can move in certain
-        direction on tile (tileX,tileY)
-        '''
-        # TODO: Implement this
-        pass
-    #-----------------------
-
-    def LoadTileList(self, tilesets):
+    def LoadTileSet(self, tilesets):
         '''
         Loads tile list from tileset. 
         Iterates through tilesets to make tile lists
@@ -112,39 +120,121 @@ class Map():
             except:
                 raise Exception(
                     "Error: Tile set file \'", tilesetData['image'], "\' does not exist.")
+            tilesetImg = tilesetImg.convert()
             Debug("Tileset image is successfully loaded")
+            spacing = tilesetData['spacing']
+            margin = tilesetData['margin']
+            tileset_tilesize = tilesetData['tilewidth']
             tilesetWidth, tilesetHeight = tilesetImg.get_size()
             # This is the index offset of tileset
             count = tilesetData['firstgid'] - 1
             for tile_y in range(0,
-                                int(tilesetHeight / GameConstants.TILESET_TILESIZE)):
+                                int(tilesetHeight / tileset_tilesize)):
                 for tile_x in range(0,
-                                    int(tilesetWidth / GameConstants.TILESET_TILESIZE)):
-                    rect = (tile_x * GameConstants.TILESET_TILESIZE,
-                            tile_y * GameConstants.TILESET_TILESIZE,
-                            GameConstants.TILESIZE, GameConstants.TILESIZE)
+                                    int(tilesetWidth / tileset_tilesize)):
+                    rect = (tile_x * tileset_tilesize + (tile_x+margin)*spacing,
+                            tile_y * tileset_tilesize + (tile_y+margin)*spacing,
+                            tileset_tilesize, tileset_tilesize)
                     tileList[count] = tilesetImg.subsurface(rect)
                     tileProp[count] = tilesetData['properties']
                     count += 1
             # When there is no tile, i.e. tile data is 0
             tileList[-1] = None
-            tileProp[-1] = None
             Debug("Tileset list is successfully created")
-        return tileList
+            tileProp[-1] = None
+            Debug("Tileset property is successfully created")
+        return [tileList,tileProp]
+    
+    def SetupSectors(self, layers):
+        sectors = list(range(self.size[0]))
+        for s in range(len(sectors)):
+            sectors[s] = list(range(self.size[1]))
+        for row in range(self.size[1]):
+            for col in range(self.size[0]):
+                sectors[col][row] = Sector(self.evManager)
 
-    #-----------------------
+        for col in range(len(sectors)):
+            for row in range(len(sectors[0])):
+                # Set Properties
+                prop = []
+                for l in layers:
+                    prop.append(l[1][row][col]) # Note: row and col is different
+                # Set Neighbors
+                up=None
+                down=None
+                left=None
+                right=None
+                if row == 0:
+                    up = None
+                else:
+                    up = sectors[col][row - 1]
+                try:
+                    # When IndexError occur, sector is out of map
+                    down = sectors[col][row + 1]
+                except IndexError:
+                    down = None
+                if col == 0:
+                    left = None
+                else:
+                    left = sectors[col - 1][row]
+                try:
+                    right = sectors[col + 1][row]
+                except IndexError:
+                    right = None
+                sectors[col][row].SetNeighbors([up,down,left,right])
+                sectors[col][row].SetProperties(prop)
+        return sectors
+                    
     def Notify(self, event):
         '''
         NOTE: should use imported event lists for levels
         '''
         pass
-#--------------------------
 
 
-class Tile:
-
-    def __init__(self, evManager, surface=None):
+class Sector:
+    '''
+    A sector stores some information of a certain tile,
+    including but not limited to:
+    neighbor sectors, properties
+    '''
+    def __init__(self, evManager):
         '''
-        Initiates a tile. Can have surface to display
+        Initiates a sector
         '''
         self.evManager = evManager
+        self.neighbors = list(range(4))
+        self.neighbors[GameConstants.DIRECTION_UP] = None
+        self.neighbors[GameConstants.DIRECTION_DOWN] = None
+        self.neighbors[GameConstants.DIRECTION_LEFT] = None
+        self.neighbors[GameConstants.DIRECTION_RIGHT] = None
+
+        self.properties = {}
+
+    def SetNeighbors(self, neighbors=[None,None,None,None]):
+        '''
+        Set the neighbor sectors.
+        @type neighbors: List, [UP,DOWN,LEFT,RIGHT]
+        '''
+        self.neighbors = list(neighbors) # Copy the list
+
+    def SetNeighbor(self, neighbor, direction):
+        '''
+        Set neighbor on one direction
+        '''
+        self.neighbors[direction] = neighbor
+
+    def SetProperties(self, properties):
+        '''
+        Sets the properties
+        @type properties: List
+        '''
+        if properties != None:
+            for prop in properties:
+                if prop != None:
+                    self.properties.update(prop)
+
+
+    def CanMove(self, direction):
+        return self.neighbors[direction] != None and \
+                self.neighbors[direction].properties.get('Obstacle') != 'True'

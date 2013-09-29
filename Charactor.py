@@ -43,15 +43,19 @@ class Charactor:
     def __init__(self, evManager):
         self.evManager = evManager
         self.evManager.RegisterListener(self)
+        # This is a tile data
         self.sector = None
+        # This is the coordinate
+        self.coordinate = (None,None)
     # --------------------
 
     def Move(self, direction):
-        if self.sector.MovePossible(direction):
-            newSector = self.sector.neighbors[direction]
-            self.sector = newSector
-            ev = Events.CharactorMoveEvent(self)
-            self.evManager.Post(ev)
+        pass
+        #if self.sector.MovePossible(direction):
+        #    newSector = self.sector.neighbors[direction]
+        #    self.sector = newSector
+        #    ev = Events.CharactorMoveEvent(self)
+        #    self.evManager.Post(ev)
 
     #------------------------------
     def Place(self, sector):
@@ -61,8 +65,9 @@ class Charactor:
 
     #--------------------------
     def Notify(self, event):
-        if isinstance(event, Events.GameStartedEvent):
-            gameMap = event.game.map
-            self.Place(gameMap.sectors[gameMap.startSectorIndex])
-        elif isinstance(event, Events.CharactorMoveRequest):
-            self.Move(event.direction)
+        pass
+        #if isinstance(event, Events.GameStartedEvent):
+        #    gameMap = event.game.map
+        #    self.Place(gameMap.sectors[gameMap.startSectorIndex])
+        #elif isinstance(event, Events.CharactorMoveRequest):
+        #    self.Move(event.direction)
