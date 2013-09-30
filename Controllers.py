@@ -32,6 +32,9 @@ class KeyboardController():
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         ev = Events.QuitEvent()
+                    else:
+                        ev = Events.KeyPressedEvent(event.key)
+                        #ev = Events.GameStartRequest()
                 if ev:
                         self.evManager.Post(ev)
 # ---------------------------------

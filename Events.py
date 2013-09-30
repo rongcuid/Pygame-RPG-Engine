@@ -107,3 +107,13 @@ class PlayerJoinEvent(Event):
     def __init__(self, player):
         self.name = "Player Join Event"
         self.player = player
+
+# The following are key events
+class KeyPressedEvent(Event):
+    '''
+    Key pressed
+    '''
+    def __init__(self, key):
+        self.name = "Key Pressed Event"
+        self.key = key
+# ----------------------------

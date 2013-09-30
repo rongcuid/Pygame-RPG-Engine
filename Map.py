@@ -27,24 +27,33 @@ class Map():
         self.evManager = evManager
         self.evManager.RegisterListener(self)
 
-        self.state = Map.STATE_PREPARING
-
-        tileLayersData, tilesetsData = self.Read(map_file)
-        self.tileList, self.tileProp = self.LoadTileSet(tilesetsData)
+        self.map_file = map_file
 
         # This is used to store layers built
         self.layers = []
+        self.size = (0,0)
+        self.sectors = None
+
+        self.state = None
+
+        #self.Build()
+
+    def Build(self):
+        self.state = Map.STATE_PREPARING
+
+        tileLayersData, tilesetsData = self.Read(self.map_file)
+        self.tileList, self.tileProp = self.LoadTileSet(tilesetsData)
 
         self.size = (tileLayersData[0]['width'], tileLayersData[0]['height'])
 
         for l in range(len(tileLayersData)):
             self.layers.append(
-                self.Build(tileLayersData[l]))
+                self.BuildLayer(tileLayersData[l]))
 
         self.sectors = self.SetupSectors(self.layers)
 
         self.state = Map.STATE_BUILT
-        evManager.Post(Events.MapBuiltEvent(self))
+        self.evManager.Post(Events.MapBuiltEvent(self))
 
     def GetLayers(self):
         layers = []
@@ -73,7 +82,7 @@ class Map():
 
         return [tileLayersData, tilesetsData]
 
-    def Build(self, tileMapData):
+    def BuildLayer(self, tileMapData):
         '''
         Reads a list of tiles used, the number of 
         columns of tiles for the width, and construct map

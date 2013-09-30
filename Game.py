@@ -38,8 +38,22 @@ class Game:
         self.map = Map.Map(GameConstants.TEST_LEVEL_MAP, evManager)
     #----------------
 
+    def Start(self):
+        self.map.Build()
+        self.state = Game.STATE_RUNNING
+        ev = Events.GameStartedEvent(self)
+        self.evManager.Post(ev)
+    #-----------------
     def Notify(self, event):
-        pass
+        # Temporary test code
+        if isinstance(event, Events.KeyPressedEvent):
+            if event.key == K_RETURN:
+                ev = Events.GameStartRequest()
+                self.evManager.Post(ev)
+        # -----------------
+        if isinstance(event, Events.GameStartRequest):
+            if self.state == Game.STATE_PREPARING:
+                self.Start()
 
 #---------------------------------------
 
