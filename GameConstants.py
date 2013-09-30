@@ -7,6 +7,7 @@ This file stores all global constants in the game
 '''
 
 DEBUG = True
+SHOW_FPS = True
 
 LOGICRATE = 30  # Rate of logic calculation
 

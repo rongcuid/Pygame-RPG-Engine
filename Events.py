@@ -2,6 +2,7 @@
 This file contains all types of events in the game
 '''
 
+from Debug import Debug
 
 class Event():
 
@@ -79,6 +80,7 @@ class CharactorMoveEvent(Event):
 
     def __init__(self, charactor):
         self.name = "Charactor Move Event"
+        Debug(charactor)
         self.charactor = charactor
 
 
@@ -99,6 +101,7 @@ class CharactorPlaceEvent(Event):
 
     def __init__(self, charactor):
         self.name = "Charactor Place Event"
+        Debug(charactor)
         self.charactor = charactor
 
 

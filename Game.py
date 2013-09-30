@@ -15,6 +15,7 @@ import Events
 import Controllers
 import Views
 import Map
+import Charactor
 
 #--------------------------------------
 
@@ -64,6 +65,8 @@ def main():
     keybd = Controllers.KeyboardController(evManager)
     spinner = Controllers.CPUSpinnerController(evManager)
     pygameView = Views.PygameView(evManager)
+    
+    charactor = Charactor.Charactor(evManager)
 
     game = Game(evManager)
     spinner.Run()

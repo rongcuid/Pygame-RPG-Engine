@@ -198,6 +198,7 @@ class Map():
                     right = None
                 sectors[col][row].SetNeighbors([up, down, left, right])
                 sectors[col][row].SetProperties(prop)
+                sectors[col][row].SetCoordinate(col,row)
         return sectors
 
     def Notify(self, event):
@@ -215,6 +216,10 @@ class Sector:
     neighbor sectors, properties
     '''
 
+    def __str__(self):
+        return "Position: " + str((self.x,self.y)) + \
+                " Properties: " + str(self.properties)
+
     def __init__(self, evManager):
         '''
         Initiates a sector
@@ -228,6 +233,9 @@ class Sector:
 
         self.properties = {}
 
+    def SetCoordinate(self, x, y):
+        self.x = x
+        self.y = y
     def SetNeighbors(self, neighbors=[None, None, None, None]):
         '''
         Set the neighbor sectors.

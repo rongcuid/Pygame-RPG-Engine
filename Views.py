@@ -30,6 +30,8 @@ class PygameView:
 
         self.state = self.STATE_IDLE
 
+        self.frames = 0
+
         pygame.init()
 
         pygame.key.set_repeat(100,100)
@@ -75,7 +77,12 @@ class PygameView:
     def Notify(self, event):
         if isinstance(event, Events.TickEvent):
             if self.state == self.STATE_IDLE:
+                self.frames += 1
                 pygame.display.flip()
+        elif isinstance(event, Events.SecondEvent):
+            if GameConstants.SHOW_FPS:
+                Debug("PygameView: FPS = ", self.frames)
+            self.frames = 0
         elif isinstance(event, Events.MapBuiltEvent):
             gameMap = event.map
             self.ShowMap(gameMap)
