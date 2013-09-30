@@ -50,6 +50,8 @@ class CPUSpinnerController():
         self.evManager = evManager
         self.evManager.RegisterListener(self)
 
+        self.game = None
+
         self.keepGoing = True
     #----------------------------
 
@@ -64,10 +66,11 @@ class CPUSpinnerController():
         while self.keepGoing:
             event = Events.TickEvent()
             self.evManager.Post(event)
-            # Post a LogicTickEvent every logic cycle
-            if self.IntervalPassed(prevTick,
-                                   1000 / GameConstants.LOGICRATE):
-                self.evManager.Post(Events.LogicTickEvent())
+            if self.game:
+                # Post a LogicTickEvent every logic cycle
+                if self.IntervalPassed(prevTick,
+                                       1000 / GameConstants.LOGICRATE):
+                    self.evManager.Post(Events.LogicTickEvent(self.game))
             # Post a SecondEvent every second
             if self.OneSecPassed(prevTick):
                 self.evManager.Post(Events.SecondEvent())
@@ -87,3 +90,5 @@ class CPUSpinnerController():
     def Notify(self, event):
         if isinstance(event, Events.QuitEvent):
             self.keepGoing = False
+        elif isinstance(event, Events.GameStartedEvent):
+            self.game = event.game

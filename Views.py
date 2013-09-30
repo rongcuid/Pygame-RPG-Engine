@@ -67,18 +67,28 @@ class PygameView:
         self.state = self.STATE_IDLE
 
     #-----------------------------
+    def ShowCharactor(self, charactor):
+        # TODO: Overlaid charactor sprite
+        sector = charactor.sector
+        sprite = charactor.sprite
+        self.background.blit(sprite.image,sprite.rect.topleft)
+        self.window.blit(self.background,(0,0))
+        
     def DrawTile(self, tile_x, tile_y, mapLayer):
         tile = mapLayer[tile_y][tile_x]
         if tile:  # Makes sure the tile is not None
             self.background.blit(
                 tile, (tile_x * GameConstants.TILESIZE, tile_y * GameConstants.TILESIZE))
 
-    #-------------------------------
+    #------------------------------
     def Notify(self, event):
         if isinstance(event, Events.TickEvent):
             if self.state == self.STATE_IDLE:
                 self.frames += 1
                 pygame.display.flip()
+        elif isinstance(event, Events.LogicTickEvent):
+            for charactor in event.game.charactors:
+                self.ShowCharactor(charactor)
         elif isinstance(event, Events.SecondEvent):
             if GameConstants.SHOW_FPS:
                 Debug("PygameView: FPS = ", self.frames)

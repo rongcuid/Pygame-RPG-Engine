@@ -31,8 +31,9 @@ class SecondEvent(Event):
 
 class LogicTickEvent(Event):
 
-    def __init__(self):
+    def __init__(self, game):
         self.name = "Logic Tick Event"
+        self.game = game
 
 
 class QuitEvent(Event):
@@ -104,14 +105,6 @@ class CharactorPlaceEvent(Event):
         Debug(charactor)
         self.charactor = charactor
 
-
-class PlayerJoinEvent(Event):
-
-    def __init__(self, player):
-        self.name = "Player Join Event"
-        self.player = player
-
-# The following are key events
 class KeyPressedEvent(Event):
     '''
     Key pressed
@@ -119,4 +112,3 @@ class KeyPressedEvent(Event):
     def __init__(self, key):
         self.name = "Key Pressed Event"
         self.key = key
-# ----------------------------
