@@ -46,6 +46,7 @@ class PygameView:
         pygame.display.flip()
 
         self.backSprite = pygame.sprite.RenderUpdates()
+        self.frontSprite = pygame.sprite.RenderUpdates()
 
     #-------------------------------
 
@@ -76,7 +77,12 @@ class PygameView:
         sprite = charactor.sprite
         #self.background.blit(sprite.image,sprite.rect.topleft)
         #self.window.blit(self.background,(0,0))
+        overlay = pygame.sprite.Sprite(self.frontSprite)
+        overlay.image = sprite.image
+        overlay.rect = sprite.image.get_rect()
+        self.frontSprite.draw(self.window)
         
+        #----------------
     def DrawTile(self, mapLayers):
         #tile = mapLayer[tile_y][tile_x]
         #if tile:  # Makes sure the tile is not None
@@ -93,6 +99,8 @@ class PygameView:
                                 tile_x, tile_y)
         #self.background.blit(image,(0,0))
         return image
+
+    #-------------------
     def DrawOneTile(self, image, tile, tile_x, tile_y):
         if tile:
             image.blit(tile,
@@ -105,11 +113,20 @@ class PygameView:
         if isinstance(event, Events.TickEvent):
             if self.state == self.STATE_IDLE:
                 self.frames += 1
-                pygame.display.flip()
+                #pygame.display.flip()
+                self.backSprite.clear(self.window,self.background)
+                self.frontSprite.clear(self.window,self.background)
+
+                self.backSprite.update()
+                self.frontSprite.update()
+
+                dirtyRect1 = self.backSprite.draw(self.window)
+                dirtyRect2 = self.frontSprite.draw(self.window)
+                dirtyRects = dirtyRect1 + dirtyRect2
+                pygame.display.update(dirtyRects)
         elif isinstance(event, Events.LogicTickEvent):
-            #for charactor in event.game.charactors:
-            #    self.ShowCharactor(charactor)
-            pass
+            for charactor in event.game.charactors:
+                self.ShowCharactor(charactor)
         elif isinstance(event, Events.SecondEvent):
             if GameConstants.SHOW_FPS:
                 Debug("PygameView: FPS = ", self.frames)
