@@ -113,7 +113,8 @@ class Charactor:
             if event.key == K_RIGHT:
                 ev = self.Move(GameConstants.DIRECTION_RIGHT)
                 # Test Code
-                self.sprite.moveTo = (32,0)
+                self.sprite.moveTo = (self.sprite.rect.x + 32,
+                        self.sprite.rect.y)
                 # ---------
             elif event.key == K_LEFT:
                 ev = self.Move(GameConstants.DIRECTION_LEFT)
@@ -140,9 +141,10 @@ class CharactorSprite(pygame.sprite.Sprite):
         self.identity = CharactorSprite.count
 
         self.charactor = charactor
-        self.moveTo = (0,0)
+        self.moveTo = None
 
     def Update(self):
         if self.moveTo:
-            self.rect.center = self.moveTo
+            self.rect.topleft = self.moveTo
             self.moveTo = None
+

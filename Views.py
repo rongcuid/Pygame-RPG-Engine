@@ -52,22 +52,14 @@ class PygameView:
 
     def ShowMap(self, gameMap, xoffset=0, yoffset=0):
         # TODO: Offsets, or Camera
-        # Clear screen
         self.state = self.STATE_MAP_BUILDING
         mapLayers = gameMap.GetLayers()
-        self.background.fill((0, 0, 0))
-        self.window.blit(self.background, (0, 0))
-        pygame.display.flip()
-
         # Draw objects
         map_img = self.DrawTile(mapLayers)
         overlay = pygame.sprite.Sprite(self.backSprite)
         overlay.image = map_img
         overlay.rect = map_img.get_rect()
 
-        self.window.blit(self.background, (0, 0))
-        self.backSprite.draw(self.window)
-        pygame.display.flip()
         self.state = self.STATE_IDLE
 
     #-----------------------------
@@ -75,20 +67,12 @@ class PygameView:
         # TODO: Overlaid charactor sprite
         sector = charactor.sector
         sprite = charactor.sprite
-        #self.background.blit(sprite.image,sprite.rect.topleft)
-        #self.window.blit(self.background,(0,0))
         overlay = pygame.sprite.Sprite(self.frontSprite)
         overlay.image = sprite.image
-        overlay.rect = sprite.image.get_rect()
-        self.frontSprite.draw(self.window)
+        overlay.rect = sprite.rect
         
         #----------------
     def DrawTile(self, mapLayers):
-        #tile = mapLayer[tile_y][tile_x]
-        #if tile:  # Makes sure the tile is not None
-        #    self.background.blit(
-        #        tile, (tile_x * GameConstants.TILESIZE,
-        #                tile_y * GameConstants.TILESIZE))
         image = pygame.Surface(self.window.get_size())
         for mapLayer in mapLayers:
             for tile_y in range(0, len(mapLayer)):
@@ -111,9 +95,8 @@ class PygameView:
     #------------------------------
     def Notify(self, event):
         if isinstance(event, Events.TickEvent):
+            self.frames += 1
             if self.state == self.STATE_IDLE:
-                self.frames += 1
-                #pygame.display.flip()
                 self.backSprite.clear(self.window,self.background)
                 self.frontSprite.clear(self.window,self.background)
 
