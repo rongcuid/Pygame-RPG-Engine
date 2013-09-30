@@ -9,7 +9,7 @@ This file stores all global constants in the game
 DEBUG = True
 SHOW_FPS = True
 
-LOGICRATE = 30  # Rate of logic calculation
+LOGICRATE = 100  # Rate of logic calculation and screen refresh
 
 WINDOWSIZE = (800, 600)
 

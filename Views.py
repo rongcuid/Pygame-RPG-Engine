@@ -94,7 +94,7 @@ class PygameView:
 
     #------------------------------
     def Notify(self, event):
-        if isinstance(event, Events.TickEvent):
+        if isinstance(event, Events.LogicTickEvent):
             self.frames += 1
             if self.state == self.STATE_IDLE:
                 self.backSprite.clear(self.window,self.background)
@@ -107,7 +107,7 @@ class PygameView:
                 dirtyRect2 = self.frontSprite.draw(self.window)
                 dirtyRects = dirtyRect1 + dirtyRect2
                 pygame.display.update(dirtyRects)
-        elif isinstance(event, Events.LogicTickEvent):
+        #elif isinstance(event, Events.LogicTickEvent):
             for charactor in event.game.charactors:
                 self.ShowCharactor(charactor)
         elif isinstance(event, Events.SecondEvent):
