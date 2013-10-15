@@ -65,8 +65,13 @@ class PygameView:
     #-----------------------------
     def ShowCharactor(self, charactor):
         # TODO: Overlaid charactor sprite
+        # TODO: Animation etc
         sector = charactor.sector
         sprite = charactor.sprite
+        # Note: No Camera yet
+        sprite.moveTo = (sector.x * GameConstants.TILESIZE,
+                sector.y * GameConstants.TILESIZE)
+
         overlay = pygame.sprite.Sprite(self.frontSprite)
         overlay.image = sprite.image
         overlay.rect = sprite.rect

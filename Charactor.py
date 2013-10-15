@@ -112,10 +112,6 @@ class Charactor:
             # one
             if event.key == K_RIGHT:
                 ev = self.Move(GameConstants.DIRECTION_RIGHT)
-                # Test Code
-                self.sprite.moveTo = (self.sprite.rect.x + 32,
-                        self.sprite.rect.y)
-                # ---------
             elif event.key == K_LEFT:
                 ev = self.Move(GameConstants.DIRECTION_LEFT)
             elif event.key == K_UP:
@@ -141,6 +137,7 @@ class CharactorSprite(pygame.sprite.Sprite):
         self.identity = CharactorSprite.count
 
         self.charactor = charactor
+        # The new position of sprite
         self.moveTo = None
 
     def Update(self):
