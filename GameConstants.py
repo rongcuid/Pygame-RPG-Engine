@@ -24,3 +24,6 @@ TILESET_TILESIZE = 32  # Width/Height if a tile in tileset
 TILESET_SPACING = 1  # Spacing between tiles
 
 TEST_LEVEL_MAP = 'data/desert.json'
+
+KEY_REPEAT_DELAY = 25
+KEY_REPEAT_INTERVAL = 75

@@ -35,6 +35,8 @@ class KeyboardController():
                     else:
                         ev = Events.KeyPressedEvent(event.key)
                         #ev = Events.GameStartRequest()
+                elif event.type == KEYUP:
+                    ev = Events.KeyReleasedEvent(event.key)
                 if ev:
                         self.evManager.Post(ev)
 # ---------------------------------

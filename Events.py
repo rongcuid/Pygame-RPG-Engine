@@ -112,3 +112,11 @@ class KeyPressedEvent(Event):
     def __init__(self, key):
         self.name = "Key Pressed Event"
         self.key = key
+
+class KeyReleasedEvent(Event):
+    '''
+    Key released
+    '''
+    def __init__(self, key):
+        self.name = "Key Released Event"
+        self.key = key

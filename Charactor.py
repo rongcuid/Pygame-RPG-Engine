@@ -62,6 +62,11 @@ class Charactor:
         Charactor.count += 1
         self.identity = Charactor.count
 
+        # Records the previous moving directions
+        self.prevDir = []
+        # Records the current moving direction
+        self.currDir = None
+
     # --------------------
     def Move(self, direction, facing=None):
         if not facing:
@@ -111,13 +116,13 @@ class Charactor:
             # when another key is pressed when holding the current
             # one
             if event.key == K_RIGHT:
-                ev = self.Move(GameConstants.DIRECTION_RIGHT)
+                self.Move(GameConstants.DIRECTION_RIGHT)
             elif event.key == K_LEFT:
-                ev = self.Move(GameConstants.DIRECTION_LEFT)
+                self.Move(GameConstants.DIRECTION_LEFT)
             elif event.key == K_UP:
-                ev = self.Move(GameConstants.DIRECTION_UP)
+                self.Move(GameConstants.DIRECTION_UP)
             elif event.key == K_DOWN:
-                ev = self.Move(GameConstants.DIRECTION_DOWN)
+                self.Move(GameConstants.DIRECTION_DOWN)
 
 class CharactorSprite(pygame.sprite.Sprite):
     count = 0

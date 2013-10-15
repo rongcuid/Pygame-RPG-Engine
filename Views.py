@@ -34,7 +34,8 @@ class PygameView:
 
         pygame.init()
 
-        pygame.key.set_repeat(100,100)
+        pygame.key.set_repeat(GameConstants.KEY_REPEAT_DELAY,
+                GameConstants.KEY_REPEAT_INTERVAL)
         self.window = pygame.display.set_mode(GameConstants.WINDOWSIZE)
         # self.window.fill((255,255,255))
         pygame.display.set_caption('Test Game')
