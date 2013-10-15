@@ -112,9 +112,6 @@ class Charactor:
             self.sprite.Update()
         elif isinstance(event, Events.KeyPressedEvent):
             # TODO: If GUI is on, don't move
-            # TODO: Record previous direction to change direction
-            # when another key is pressed when holding the current
-            # one
             if event.key == K_RIGHT:
                 self.Move(GameConstants.DIRECTION_RIGHT)
             elif event.key == K_LEFT:
