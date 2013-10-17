@@ -89,7 +89,7 @@ class Map():
         '''
         data = tileMapData['data']
         columns = tileMapData['width']
-        alpha = int(tileMapData['opacity'] * 255)
+        alpha = int(tileMapData['opacity'] * 256)
         rows = int(len(data) / columns)
         assert rows * columns == len(data)  # Make sure number is correct
         tileMap = []

@@ -105,7 +105,9 @@ class Charactor:
         if isinstance(event, Events.GameStartedEvent):
             gameMap = event.game.map
             #self.Place(gameMap.sectors[gameMap.startSectorIndex])
+            # Temporary Test Code
             self.Place(gameMap.sectors[0][0])
+            #-------------------
         elif isinstance(event, Events.CharactorMoveRequest):
             self.Move(event.direction)
         elif isinstance(event, Events.LogicTickEvent):
