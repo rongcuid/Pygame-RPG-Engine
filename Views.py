@@ -9,7 +9,7 @@ from pygame.locals import *
 
 from Debug import Debug
 
-import GameConstants
+import GameConstants as GC
 import EventManager
 import Events
 import Controllers
@@ -42,9 +42,9 @@ class PygameView:
         # -----------------
         pygame.init()
 
-        pygame.key.set_repeat(GameConstants.KEY_REPEAT_DELAY,
-                GameConstants.KEY_REPEAT_INTERVAL)
-        self.window = pygame.display.set_mode(GameConstants.WINDOWSIZE)
+        pygame.key.set_repeat(GC.KEY_REPEAT_DELAY,
+                GC.KEY_REPEAT_INTERVAL)
+        self.window = pygame.display.set_mode(GC.WINDOWSIZE)
         # self.window.fill((255,255,255))
         pygame.display.set_caption('Test Game')
         self.background = pygame.Surface(self.window.get_size())
@@ -74,8 +74,10 @@ class PygameView:
 
     def ShowMap(self, map_img):
         self.map_layer.image = map_img
-        self.map_layer.rect = self.map_layer.image.get_rect().move(self.xoffset,self.yoffset)
-        #map_layer.rect.topleft = (self.xoffset, self.yoffset)
+        self.map_layer.rect = \
+                self.map_layer.image.get_rect().move(
+                        self.xoffset - GC.TILESET_TILESIZE / 2,
+                        self.yoffset + GC.TILESET_TILESIZE / 2)
 
 
     #-----------------------------
@@ -86,14 +88,14 @@ class PygameView:
         sprite = charactor.sprite
 
         if self.camera_state == PygameView.CAMERA_TRACK_DISABLED:
-            sprite.moveTo = (sector.x * GameConstants.TILESIZE + self.xoffset,
-                    sector.y * GameConstants.TILESIZE + self.yoffset)
+            sprite.moveTo = (sector.x * GC.TILESIZE + self.xoffset,
+                    sector.y * GC.TILESIZE + self.yoffset)
         elif self.camera_state == PygameView.CAMERA_TRACK_ENABLED and \
                 self.trackto == charactor:
-                    sprite.moveTo = (GameConstants.WINDOWSIZE[0] / 2 - GameConstants.TILESIZE / 2,
-                            GameConstants.WINDOWSIZE[1] / 2 + GameConstants.TILESIZE / 2)
-                    self.UpdateCameraOffset(GameConstants.WINDOWSIZE[0] / 2 - sector.x * GameConstants.TILESIZE,
-                            GameConstants.WINDOWSIZE[1] / 2 + sector.y * GameConstants.TILESIZE)
+                    sprite.moveTo = (GC.WINDOWSIZE[0] / 2 - GC.TILESIZE / 2,
+                            GC.WINDOWSIZE[1] / 2 + GC.TILESIZE / 2)
+                    self.UpdateCameraOffset(GC.WINDOWSIZE[0] / 2 - sector.x * GC.TILESIZE,
+                            GC.WINDOWSIZE[1] / 2 - sector.y * GC.TILESIZE)
 
         self.charactor_layer.image = sprite.image 
         self.charactor_layer.rect = sprite.rect 
@@ -113,8 +115,8 @@ class PygameView:
     def DrawOneTile(self, image, tile, tile_x, tile_y):
         if tile:
             image.blit(tile,
-                    (tile_x * GameConstants.TILESIZE,
-                    tile_y * GameConstants.TILESIZE))
+                    (tile_x * GC.TILESIZE,
+                    tile_y * GC.TILESIZE))
 
 
     #------------------------------
@@ -123,7 +125,6 @@ class PygameView:
             self.xoffset = xoffset
         if yoffset:
             self.yoffset = yoffset
-        Debug("Xoffset: ", xoffset, " Yoffset: ", yoffset)
 
     def SetTrack(self, charactor):
         self.trackto = charactor
@@ -153,14 +154,10 @@ class PygameView:
 
                 pygame.display.update(dirtyRects)
         elif isinstance(event, Events.SecondEvent):
-            if GameConstants.SHOW_FPS:
+            if GC.SHOW_FPS:
                 Debug("PygameView: FPS = ", self.frames)
             self.frames = 0
 
-        # Test Code
-        elif isinstance(event, Events.KeyPressedEvent):
-            self.UpdateCameraOffset(self.xoffset + 16, self.yoffset + 16)
-        #-----------
         elif isinstance(event, Events.MapBuiltEvent):
             self.gameMaps.append(event.map)
             # Test Code

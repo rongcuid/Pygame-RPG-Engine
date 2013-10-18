@@ -76,7 +76,7 @@ def main():
     
     game = Game(evManager)
     # Temp Test Code
-    #pygameView.SetTrack(game.charactors[0])
+    pygameView.SetTrack(game.charactors[0])
     # -------------
     spinner.Run()
 
