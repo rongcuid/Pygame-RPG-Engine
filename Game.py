@@ -42,6 +42,7 @@ class Game:
         img = pygame.image.load("data/Player-test.png")
         sprite = Charactor.CharactorSprite(self.charactors[0],img)
         self.charactors[0].SetSprite(sprite)
+        self.Start()
         # ----------
     #----------------
 
@@ -53,10 +54,10 @@ class Game:
     #-----------------
     def Notify(self, event):
         # Temporary test code
-        if isinstance(event, Events.KeyPressedEvent):
-            if event.key == K_RETURN:
-                ev = Events.GameStartRequest()
-                self.evManager.Post(ev)
+        #if isinstance(event, Events.KeyPressedEvent):
+        #    if event.key == K_RETURN:
+        #        ev = Events.GameStartRequest()
+        #        self.evManager.Post(ev)
         # -----------------
         if isinstance(event, Events.GameStartRequest):
             if self.state == Game.STATE_PREPARING:

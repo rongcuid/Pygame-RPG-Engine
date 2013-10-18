@@ -38,7 +38,7 @@ class PygameView:
         self.yoffset = 0
         self.trackto = None
         self.gameMaps = []
-        self.map_img = None
+        self.current_map = None
         # -----------------
         pygame.init()
 
@@ -49,29 +49,34 @@ class PygameView:
         pygame.display.set_caption('Test Game')
         self.background = pygame.Surface(self.window.get_size())
         self.background.fill((0, 0, 0))
-        #-----------
 
         self.window.blit(self.background, (0, 0))
-        pygame.display.flip()
+        pygame.display.update()
 
         self.backSprite = pygame.sprite.RenderUpdates()
         self.frontSprite = pygame.sprite.RenderUpdates()
 
+        self.map_layer = pygame.sprite.Sprite(self.backSprite)
+        self.charactor_layer = pygame.sprite.Sprite(self.frontSprite)
+
     #-------------------------------
 
-    def ShowMap(self, gameMap):
+    #def ShowMap(self, gameMap):
+    def PrepMap(self, gameMap):
         # TODO: Offsets, or Camera
         self.state = PygameView.STATE_MAP_BUILDING
         mapLayers = gameMap.GetLayers()
-        # Test code
-        if not self.map_img:
-            # Draw objects
-            self.map_img = self.DrawTile(mapLayers)
-        overlay = pygame.sprite.Sprite(self.backSprite)
-        overlay.image = self.map_img
-        overlay.rect = self.map_img.get_rect().center = self.xoffset, self.yoffset
-
+        tiles = self.DrawTile(mapLayers)
+        map_img = pygame.Surface((tiles.get_rect().w,tiles.get_rect().h))
+        map_img.blit(tiles, (0,0))
         self.state = PygameView.STATE_IDLE
+        return map_img
+
+    def ShowMap(self, map_img):
+        self.map_layer.image = map_img
+        self.map_layer.rect = self.map_layer.image.get_rect().move(self.xoffset,self.yoffset)
+        #map_layer.rect.topleft = (self.xoffset, self.yoffset)
+
 
     #-----------------------------
     def ShowCharactor(self, charactor):
@@ -79,7 +84,7 @@ class PygameView:
         # TODO: Animation etc
         sector = charactor.sector
         sprite = charactor.sprite
-        # Note: No Camera yet
+
         if self.camera_state == PygameView.CAMERA_TRACK_DISABLED:
             sprite.moveTo = (sector.x * GameConstants.TILESIZE + self.xoffset,
                     sector.y * GameConstants.TILESIZE + self.yoffset)
@@ -90,10 +95,8 @@ class PygameView:
                     self.UpdateCameraOffset(GameConstants.WINDOWSIZE[0] / 2 - sector.x * GameConstants.TILESIZE,
                             GameConstants.WINDOWSIZE[1] / 2 + sector.y * GameConstants.TILESIZE)
 
-        overlay = pygame.sprite.Sprite(self.frontSprite)
-        overlay.image = sprite.image
-        overlay.rect = sprite.rect
-        
+        self.charactor_layer.image = sprite.image 
+        self.charactor_layer.rect = sprite.rect 
         #----------------
     def DrawTile(self, mapLayers):
         image = pygame.Surface(self.window.get_size())
@@ -104,7 +107,6 @@ class PygameView:
                     if tile:
                         self.DrawOneTile(image, tile,
                                 tile_x, tile_y)
-        #self.background.blit(image,(0,0))
         return image
 
     #-------------------
@@ -121,6 +123,7 @@ class PygameView:
             self.xoffset = xoffset
         if yoffset:
             self.yoffset = yoffset
+        Debug("Xoffset: ", xoffset, " Yoffset: ", yoffset)
 
     def SetTrack(self, charactor):
         self.trackto = charactor
@@ -136,22 +139,30 @@ class PygameView:
             if self.state == self.STATE_IDLE:
                 for charactor in event.game.charactors:
                     self.ShowCharactor(charactor)
-                self.ShowMap(self.gameMaps[0])
-                self.backSprite.clear(self.window,self.background)
-                self.frontSprite.clear(self.window,self.background)
+                self.ShowMap(self.current_map)
+
                 self.backSprite.update()
                 self.frontSprite.update()
+
+                self.backSprite.clear(self.window,self.background)
+                self.frontSprite.clear(self.window,self.background)
 
                 dirtyRect1 = self.backSprite.draw(self.window)
                 dirtyRect2 = self.frontSprite.draw(self.window)
                 dirtyRects = dirtyRect1 + dirtyRect2
+
                 pygame.display.update(dirtyRects)
         elif isinstance(event, Events.SecondEvent):
             if GameConstants.SHOW_FPS:
                 Debug("PygameView: FPS = ", self.frames)
             self.frames = 0
-            # Test Code
+
+        # Test Code
+        elif isinstance(event, Events.KeyPressedEvent):
             self.UpdateCameraOffset(self.xoffset + 16, self.yoffset + 16)
-            #-----------
+        #-----------
         elif isinstance(event, Events.MapBuiltEvent):
             self.gameMaps.append(event.map)
+            # Test Code
+            self.current_map = self.PrepMap(event.map)
+            # ----------
