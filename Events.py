@@ -33,7 +33,7 @@ class LogicTickEvent(Event):
 
     def __init__(self, game):
         self.name = "Logic Tick Event"
-        self.game = game
+        #self.game = game
 
 
 class QuitEvent(Event):

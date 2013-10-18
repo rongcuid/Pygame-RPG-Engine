@@ -54,10 +54,11 @@ class Game:
     #-----------------
     def Notify(self, event):
         # Temporary test code
-        #if isinstance(event, Events.KeyPressedEvent):
-        #    if event.key == K_RETURN:
-        #        ev = Events.GameStartRequest()
-        #        self.evManager.Post(ev)
+        if isinstance(event, Events.KeyPressedEvent):
+            if event.key == K_RETURN:
+                ev = Events.GameStartRequest()
+                self.evManager.Post(ev)
+                
         # -----------------
         if isinstance(event, Events.GameStartRequest):
             if self.state == Game.STATE_PREPARING:
@@ -76,7 +77,7 @@ def main():
     
     game = Game(evManager)
     # Temp Test Code
-    pygameView.SetTrack(game.charactors[0])
+    #pygameView.SetTrack(game.charactors[0])
     # -------------
     spinner.Run()
 

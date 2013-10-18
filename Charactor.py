@@ -7,7 +7,7 @@ Created on Sep 1, 2013
 
 import pygame
 from pygame.locals import *
-import GameConstants
+import GameConstants as GC
 import Events
 from Debug import Debug
 
@@ -63,9 +63,12 @@ class Charactor:
         self.identity = Charactor.count
 
         # Records the previous moving directions
-        self.prevDir = []
+        self.prevDirs = []
         # Records the current moving direction
         self.currDir = None
+        
+        self.moving = False
+        self.moveStartTime = 0
 
     # --------------------
     def Move(self, direction, facing=None):
@@ -80,7 +83,7 @@ class Charactor:
            self.evManager.Post(ev)
 
     #------------------------------
-    def Place(self, sector, facing=GameConstants.DIRECTION_UP):
+    def Place(self, sector, facing=GC.DIRECTION_UP):
         self.sector = sector
         self.UpdateCoordinate()
         ev = Events.CharactorPlaceEvent(self)
@@ -111,25 +114,91 @@ class Charactor:
         elif isinstance(event, Events.CharactorMoveRequest):
             self.Move(event.direction)
         elif isinstance(event, Events.LogicTickEvent):
+            # TODO: Use Speed instead of that arbitrary time interval
+            if not self.moving:
+                if self.currDir != None:
+                    self.Move(self.currDir)
+                    self.moving = True
+                    self.moveStartTime = pygame.time.get_ticks()
+            else:
+                if pygame.time.get_ticks() > self.moveStartTime + 100:
+                    self.moving = False
+            # ---------
             self.sprite.Update()
         elif isinstance(event, Events.KeyPressedEvent):
             # TODO: If GUI is on, don't move
             if event.key == K_RIGHT:
-                self.Move(GameConstants.DIRECTION_RIGHT)
+                if self.currDir != GC.DIRECTION_RIGHT: # Direction changed
+                    if self.currDir != None:
+                        self.prevDirs.append(self.currDir) # Store Direction
+                    self.currDir = GC.DIRECTION_RIGHT
             elif event.key == K_LEFT:
-                self.Move(GameConstants.DIRECTION_LEFT)
+                if self.currDir != GC.DIRECTION_LEFT: # Direction changed
+                    if self.currDir != None:
+                        self.prevDirs.append(self.currDir) # Store Direction
+                    self.currDir = GC.DIRECTION_LEFT
+
             elif event.key == K_UP:
-                self.Move(GameConstants.DIRECTION_UP)
+                if self.currDir != GC.DIRECTION_UP: # Direction changed
+                    if self.currDir != None:
+                        self.prevDirs.append(self.currDir) # Store Direction
+                    self.currDir = GC.DIRECTION_UP
+
             elif event.key == K_DOWN:
-                self.Move(GameConstants.DIRECTION_DOWN)
+                if self.currDir != GC.DIRECTION_DOWN: # Direction changed
+                    if self.currDir != None:
+                        self.prevDirs.append(self.currDir) # Store Direction
+                    self.currDir = GC.DIRECTION_DOWN
+
+        elif isinstance(event, Events.KeyReleasedEvent):
+            if event.key == K_RIGHT:
+                if self.currDir == GC.DIRECTION_RIGHT:
+                    if self.prevDirs != []:
+                        self.currDir = self.prevDirs.pop()
+                    else:
+                        self.currDir = None
+                # Remove from prevDirs if not currDir
+                else:
+                    self.prevDirs.remove(GC.DIRECTION_RIGHT)
+
+            elif event.key == K_LEFT:
+                if self.currDir == GC.DIRECTION_LEFT:
+                    if self.prevDirs != []:
+                        self.currDir = self.prevDirs.pop()
+                    else:
+                        self.currDir = None
+                # Remove from prevDirs if not currDir
+                else:
+                    self.prevDirs.remove(GC.DIRECTION_LEFT)
+
+            elif event.key == K_UP:
+                if self.currDir == GC.DIRECTION_UP:
+                    if self.prevDirs != []:
+                        self.currDir = self.prevDirs.pop()
+                    else:
+                        self.currDir = None
+                # Remove from prevDirs if not currDir
+                else:
+                    self.prevDirs.remove(GC.DIRECTION_UP)
+
+            elif event.key == K_DOWN:
+                if self.currDir == GC.DIRECTION_DOWN:
+                    if self.prevDirs != []:
+                        self.currDir = self.prevDirs.pop()
+                    else:
+                        self.currDir = None
+                # Remove from prevDirs if not currDir
+                else:
+                    self.prevDirs.remove(GC.DIRECTION_DOWN)
+
 
 class CharactorSprite(pygame.sprite.Sprite):
     count = 0
     def __init__(self, charactor, surface):
         pygame.sprite.Sprite.__init__(self)
 
-        charactorSurf = pygame.Surface((GameConstants.TILESIZE,
-            GameConstants.TILESIZE))
+        charactorSurf = pygame.Surface((GC.TILESIZE,
+            GC.TILESIZE))
         charactorSurf = charactorSurf.convert_alpha()
         charactorSurf.fill((0,0,0,0)) # Transparent
         charactorSurf.blit(surface,(0,0))

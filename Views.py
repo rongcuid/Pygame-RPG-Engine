@@ -39,6 +39,7 @@ class PygameView:
         self.trackto = None
         self.gameMaps = []
         self.current_map = None
+        self.game = None
         # -----------------
         pygame.init()
 
@@ -77,7 +78,7 @@ class PygameView:
         self.map_layer.rect = \
                 self.map_layer.image.get_rect().move(
                         self.xoffset - GC.TILESET_TILESIZE / 2,
-                        self.yoffset + GC.TILESET_TILESIZE / 2)
+                        self.yoffset - GC.TILESET_TILESIZE / 2)
 
 
     #-----------------------------
@@ -88,20 +89,34 @@ class PygameView:
         sprite = charactor.sprite
 
         if self.camera_state == PygameView.CAMERA_TRACK_DISABLED:
-            sprite.moveTo = (sector.x * GC.TILESIZE + self.xoffset,
-                    sector.y * GC.TILESIZE + self.yoffset)
-        elif self.camera_state == PygameView.CAMERA_TRACK_ENABLED and \
-                self.trackto == charactor:
-                    sprite.moveTo = (GC.WINDOWSIZE[0] / 2 - GC.TILESIZE / 2,
-                            GC.WINDOWSIZE[1] / 2 + GC.TILESIZE / 2)
-                    self.UpdateCameraOffset(GC.WINDOWSIZE[0] / 2 - sector.x * GC.TILESIZE,
+            sprite.moveTo = (sector.x * GC.TILESIZE + self.xoffset - GC.TILESIZE / 2,
+                    sector.y * GC.TILESIZE + self.yoffset - GC.TILESIZE / 2)
+        #elif self.camera_state == PygameView.CAMERA_TRACK_ENABLED \
+                #    and self.trackto == charactor:
+
+        elif self.trackto == charactor:
+            sprite.moveTo = (GC.WINDOWSIZE[0] / 2 - GC.TILESIZE / 2,
+                            GC.WINDOWSIZE[1] / 2 - GC.TILESIZE / 2)
+            self.UpdateCameraOffset(GC.WINDOWSIZE[0] / 2 - sector.x * GC.TILESIZE,
                             GC.WINDOWSIZE[1] / 2 - sector.y * GC.TILESIZE)
 
         self.charactor_layer.image = sprite.image 
         self.charactor_layer.rect = sprite.rect 
         #----------------
     def DrawTile(self, mapLayers):
-        image = pygame.Surface(self.window.get_size())
+        #image = pygame.Surface(self.window.get_size())
+        #size = (len(mapLayers[0]) * GC.TILESIZE,
+        #        len(mapLayers[0][0]) * GC.TILESIZE)
+        max_w = 0
+        max_h = 0
+        for l in mapLayers:
+            if len(l) > max_h:
+                max_h = len(l)
+            if len(l[0]) > max_w:
+                max_w = len(l[0])
+        size = (max_w * GC.TILESIZE,
+                max_h * GC.TILESIZE)
+        image = pygame.Surface(size)
         for mapLayer in mapLayers:
             for tile_y in range(0, len(mapLayer)):
                 for tile_x in range(0, len(mapLayer[0])):
@@ -121,9 +136,9 @@ class PygameView:
 
     #------------------------------
     def UpdateCameraOffset(self, xoffset = None, yoffset = None):
-        if xoffset:
+        if xoffset != None:
             self.xoffset = xoffset
-        if yoffset:
+        if yoffset != None:
             self.yoffset = yoffset
 
     def SetTrack(self, charactor):
@@ -135,10 +150,12 @@ class PygameView:
         self.camera_state = PygameView.CAMERA_TRACK_DISABLED
 
     def Notify(self, event):
-        if isinstance(event, Events.LogicTickEvent):
+        if isinstance(event, Events.GameStartedEvent):
+            self.game = event.game
+        elif isinstance(event, Events.LogicTickEvent):
             self.frames += 1
             if self.state == self.STATE_IDLE:
-                for charactor in event.game.charactors:
+                for charactor in self.game.charactors:
                     self.ShowCharactor(charactor)
                 self.ShowMap(self.current_map)
 
@@ -163,3 +180,13 @@ class PygameView:
             # Test Code
             self.current_map = self.PrepMap(event.map)
             # ----------
+        # Test
+        elif isinstance(event, Events.KeyPressedEvent):
+            if event.key == K_t:
+                if self.camera_state == PygameView.CAMERA_TRACK_DISABLED:
+                    self.SetTrack(self.game.charactors[0])
+                    Debug("Track enabled")
+                else:
+                    self.DisableTrack()
+                    Debug("Track disabled")
+        #---
