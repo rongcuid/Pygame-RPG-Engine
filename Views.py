@@ -46,8 +46,7 @@ class PygameView:
         pygame.key.set_repeat(GC.KEY_REPEAT_DELAY,
                 GC.KEY_REPEAT_INTERVAL)
         self.window = pygame.display.set_mode(GC.WINDOWSIZE)
-        # self.window.fill((255,255,255))
-        pygame.display.set_caption('Test Game')
+        pygame.display.set_caption('Core Engine')
         self.background = pygame.Surface(self.window.get_size())
         self.background.fill((0, 0, 0))
 
@@ -64,7 +63,6 @@ class PygameView:
 
     #def ShowMap(self, gameMap):
     def PrepMap(self, gameMap):
-        # TODO: Offsets, or Camera
         self.state = PygameView.STATE_MAP_BUILDING
         mapLayers = gameMap.GetLayers()
         tiles = self.DrawTile(mapLayers)
@@ -104,9 +102,6 @@ class PygameView:
         self.charactor_layer.rect = sprite.rect 
         #----------------
     def DrawTile(self, mapLayers):
-        #image = pygame.Surface(self.window.get_size())
-        #size = (len(mapLayers[0]) * GC.TILESIZE,
-        #        len(mapLayers[0][0]) * GC.TILESIZE)
         max_w = 0
         max_h = 0
         for l in mapLayers:
