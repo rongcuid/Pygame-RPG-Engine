@@ -189,6 +189,7 @@ class PygameView:
                 else:
                     self.DisableTrack()
                     Debug("Track disabled")
+        #---
         elif isinstance(event, Events.WindowResizeRequest):
             pygame.display.quit()
             pygame.display.init()
@@ -199,4 +200,3 @@ class PygameView:
             self.window.blit(self.background, (0, 0))
             pygame.display.update()
 
- #---
