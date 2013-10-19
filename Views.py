@@ -189,4 +189,14 @@ class PygameView:
                 else:
                     self.DisableTrack()
                     Debug("Track disabled")
-        #---
+        elif isinstance(event, Events.WindowResizeRequest):
+            pygame.display.quit()
+            pygame.display.init()
+            self.window = pygame.display.set_mode(event.size)
+            self.background = pygame.Surface(self.window.get_size())
+            self.background.fill((0, 0, 0))
+
+            self.window.blit(self.background, (0, 0))
+            pygame.display.update()
+
+ #---

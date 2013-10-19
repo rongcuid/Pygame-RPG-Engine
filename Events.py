@@ -120,3 +120,10 @@ class KeyReleasedEvent(Event):
     def __init__(self, key):
         self.name = "Key Released Event"
         self.key = key
+class WindowResizeRequest(Event):
+    '''
+    Request to resize window
+    '''
+    def __init__(self, size):
+        self.name = "Window Resize Request Event"
+        self.size = size
