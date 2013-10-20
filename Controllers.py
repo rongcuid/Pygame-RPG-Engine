@@ -32,6 +32,11 @@ class KeyboardController():
                 elif event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         ev = Events.QuitEvent()
+                    else:
+                        ev = Events.KeyPressedEvent(event.key)
+                        #ev = Events.GameStartRequest()
+                elif event.type == KEYUP:
+                    ev = Events.KeyReleasedEvent(event.key)
                 if ev:
                         self.evManager.Post(ev)
 # ---------------------------------
@@ -47,6 +52,8 @@ class CPUSpinnerController():
         self.evManager = evManager
         self.evManager.RegisterListener(self)
 
+        self.game = None
+
         self.keepGoing = True
     #----------------------------
 
@@ -61,15 +68,16 @@ class CPUSpinnerController():
         while self.keepGoing:
             event = Events.TickEvent()
             self.evManager.Post(event)
-            # Post a LogicTickEvent every logic cycle
-            if self.IntervalPassed(prevTick,
-                                   1000 / GameConstants.LOGICRATE):
-                self.evManager.Post(Events.LogicTickEvent())
+            if self.game:
+                # Post a LogicTickEvent every logic cycle
+                if self.IntervalPassed(prevTick,
+                                       1000 / GameConstants.LOGICRATE):
+                    self.evManager.Post(Events.LogicTickEvent(self.game))
             # Post a SecondEvent every second
             if self.OneSecPassed(prevTick):
                 self.evManager.Post(Events.SecondEvent())
             prevTick = pygame.time.get_ticks()
-            #pygame.time.Clock().tick(100)
+            # pygame.time.Clock().tick(100)
 
     #----------------------------
     def OneSecPassed(self, prevTick):
@@ -84,3 +92,5 @@ class CPUSpinnerController():
     def Notify(self, event):
         if isinstance(event, Events.QuitEvent):
             self.keepGoing = False
+        elif isinstance(event, Events.GameStartedEvent):
+            self.game = event.game

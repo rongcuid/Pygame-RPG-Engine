@@ -15,6 +15,7 @@ import Events
 import Controllers
 import Views
 import Map
+import Charactor
 
 #--------------------------------------
 
@@ -35,23 +36,49 @@ class Game:
 
         self.state = Game.STATE_PREPARING
 
-        self.map = Map.Map(GameConstants.TEST_LEVEL_MAP,evManager)
+        self.map = Map.Map(GameConstants.TEST_LEVEL_MAP, evManager)
+        # Test Code    
+        self.charactors = [Charactor.Charactor(evManager)]
+        img = pygame.image.load("data/Player-test.png")
+        sprite = Charactor.CharactorSprite(self.charactors[0],img)
+        self.charactors[0].SetSprite(sprite)
+        self.Start()
+        # ----------
     #----------------
 
+    def Start(self):
+        self.map.Build()
+        self.state = Game.STATE_RUNNING
+        ev = Events.GameStartedEvent(self)
+        self.evManager.Post(ev)
+    #-----------------
     def Notify(self, event):
-        pass
+        # Temporary test code
+        if isinstance(event, Events.KeyPressedEvent):
+            if event.key == K_RETURN:
+                ev = Events.GameStartRequest()
+                self.evManager.Post(ev)
+                
+        # -----------------
+        if isinstance(event, Events.GameStartRequest):
+            if self.state == Game.STATE_PREPARING:
+                self.Start()
 
 #---------------------------------------
 
 
 def main():
     evManager = EventManager.EventManager()
-
+    # Initialize important controllers/listeners
     keybd = Controllers.KeyboardController(evManager)
     spinner = Controllers.CPUSpinnerController(evManager)
     pygameView = Views.PygameView(evManager)
-
+    # --------------------------
+    
     game = Game(evManager)
+    # Temp Test Code
+    #pygameView.SetTrack(game.charactors[0])
+    # -------------
     spinner.Run()
 
 

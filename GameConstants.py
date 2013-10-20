@@ -7,10 +7,11 @@ This file stores all global constants in the game
 '''
 
 DEBUG = True
+SHOW_FPS = True
 
-LOGICRATE = 30  # Rate of logic calculation
+LOGICRATE = 100  # Rate of logic calculation and screen refresh
 
-WINDOWSIZE = (800,600)
+WINDOWSIZE = (640, 480)
 
 DIRECTION_UP = 0
 DIRECTION_DOWN = 1
@@ -23,3 +24,7 @@ TILESET_TILESIZE = 32  # Width/Height if a tile in tileset
 TILESET_SPACING = 1  # Spacing between tiles
 
 TEST_LEVEL_MAP = 'data/desert.json'
+#TEST_LEVEL_MAP = 'data/test1-3x3.json'
+
+KEY_REPEAT_DELAY = 0
+KEY_REPEAT_INTERVAL = 0

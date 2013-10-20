@@ -2,6 +2,7 @@
 This file contains all types of events in the game
 '''
 
+from Debug import Debug
 
 class Event():
 
@@ -30,8 +31,9 @@ class SecondEvent(Event):
 
 class LogicTickEvent(Event):
 
-    def __init__(self):
+    def __init__(self, game):
         self.name = "Logic Tick Event"
+        #self.game = game
 
 
 class QuitEvent(Event):
@@ -79,6 +81,7 @@ class CharactorMoveEvent(Event):
 
     def __init__(self, charactor):
         self.name = "Charactor Move Event"
+        Debug(charactor)
         self.charactor = charactor
 
 
@@ -99,11 +102,28 @@ class CharactorPlaceEvent(Event):
 
     def __init__(self, charactor):
         self.name = "Charactor Place Event"
+        Debug(charactor)
         self.charactor = charactor
 
+class KeyPressedEvent(Event):
+    '''
+    Key pressed
+    '''
+    def __init__(self, key):
+        self.name = "Key Pressed Event"
+        self.key = key
 
-class PlayerJoinEvent(Event):
-
-    def __init__(self, player):
-        self.name = "Player Join Event"
-        self.player = player
+class KeyReleasedEvent(Event):
+    '''
+    Key released
+    '''
+    def __init__(self, key):
+        self.name = "Key Released Event"
+        self.key = key
+class WindowResizeRequest(Event):
+    '''
+    Request to resize window
+    '''
+    def __init__(self, size):
+        self.name = "Window Resize Request Event"
+        self.size = size
