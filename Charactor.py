@@ -159,7 +159,8 @@ class Charactor:
                         self.currDir = None
                 # Remove from prevDirs if not currDir
                 else:
-                    self.prevDirs.remove(GC.DIRECTION_RIGHT)
+                    if GC.DIRECTION_RIGHT in self.prevDirs:
+                        self.prevDirs.remove(GC.DIRECTION_RIGHT)
 
             elif event.key == K_LEFT:
                 if self.currDir == GC.DIRECTION_LEFT:
@@ -169,7 +170,8 @@ class Charactor:
                         self.currDir = None
                 # Remove from prevDirs if not currDir
                 else:
-                    self.prevDirs.remove(GC.DIRECTION_LEFT)
+                    if GC.DIRECTION_LEFT in self.prevDirs:
+                        self.prevDirs.remove(GC.DIRECTION_LEFT)
 
             elif event.key == K_UP:
                 if self.currDir == GC.DIRECTION_UP:
@@ -179,7 +181,8 @@ class Charactor:
                         self.currDir = None
                 # Remove from prevDirs if not currDir
                 else:
-                    self.prevDirs.remove(GC.DIRECTION_UP)
+                    if GC.DIRECTION_UP in self.prevDirs:
+                        self.prevDirs.remove(GC.DIRECTION_UP)
 
             elif event.key == K_DOWN:
                 if self.currDir == GC.DIRECTION_DOWN:
@@ -189,7 +192,8 @@ class Charactor:
                         self.currDir = None
                 # Remove from prevDirs if not currDir
                 else:
-                    self.prevDirs.remove(GC.DIRECTION_DOWN)
+                    if GC.DIRECTION_DOWN in self.prevDirs:
+                        self.prevDirs.remove(GC.DIRECTION_DOWN)
 
 
 class CharactorSprite(pygame.sprite.Sprite):

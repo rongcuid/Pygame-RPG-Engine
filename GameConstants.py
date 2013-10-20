@@ -26,5 +26,5 @@ TILESET_SPACING = 1  # Spacing between tiles
 TEST_LEVEL_MAP = 'data/desert.json'
 #TEST_LEVEL_MAP = 'data/test1-3x3.json'
 
-KEY_REPEAT_DELAY = 25
-KEY_REPEAT_INTERVAL = 75
+KEY_REPEAT_DELAY = 0
+KEY_REPEAT_INTERVAL = 0
