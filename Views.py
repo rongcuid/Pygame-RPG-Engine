@@ -40,6 +40,7 @@ class PygameView:
         self.gameMaps = []
         self.current_map = None
         self.game = None
+        self.messages = []
         # -----------------
         pygame.init()
 
@@ -194,4 +195,3 @@ class PygameView:
 
             self.window.blit(self.background, (0, 0))
             pygame.display.update()
-

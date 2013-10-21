@@ -127,3 +127,4 @@ class WindowResizeRequest(Event):
     def __init__(self, size):
         self.name = "Window Resize Request Event"
         self.size = size
+

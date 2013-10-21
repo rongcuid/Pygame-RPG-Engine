@@ -10,7 +10,7 @@ import json
 import pygame
 from pygame.locals import *
 
-from Debug import Debug
+from Debug import *
 
 import GameConstants
 import EventManager
@@ -75,6 +75,7 @@ class Map():
         try:
             map_data = json.load(open(filename))
         except:
+            ErrorMsg("Cannot read map data file ", filename)
             raise Exception("Error: Cannot read map data file ", filename)
         Debug("Map data ", filename, " is successfully read!")
         tileLayersData = map_data['layers']
