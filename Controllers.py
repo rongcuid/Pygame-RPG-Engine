@@ -7,7 +7,7 @@ from pygame.locals import *
 
 from Debug import Debug
 
-import GameConstants
+import GameConstants as GC
 import EventManager
 import Events
 
@@ -71,13 +71,13 @@ class CPUSpinnerController():
             if self.game:
                 # Post a LogicTickEvent every logic cycle
                 if self.IntervalPassed(prevTick,
-                                       1000 / GameConstants.LOGICRATE):
+                                       1000 / GC.LOGICRATE):
                     self.evManager.Post(Events.LogicTickEvent(self.game))
             # Post a SecondEvent every second
             if self.OneSecPassed(prevTick):
                 self.evManager.Post(Events.SecondEvent())
             prevTick = pygame.time.get_ticks()
-            # pygame.time.Clock().tick(100)
+            pygame.time.Clock().tick(GC.TICKRATE)
 
     #----------------------------
     def OneSecPassed(self, prevTick):
