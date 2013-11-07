@@ -181,10 +181,10 @@ class PygameView:
             if event.key == K_t:
                 if self.camera_state == PygameView.CAMERA_TRACK_DISABLED:
                     self.SetTrack(self.game.charactors[0])
-                    Debug("Track enabled")
+                    Debug("PygameView: Track enabled")
                 else:
                     self.DisableTrack()
-                    Debug("Track disabled")
+                    Debug("PygameView: Track disabled")
         #---
         elif isinstance(event, Events.WindowResizeRequest):
             pygame.display.quit()

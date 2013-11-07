@@ -154,7 +154,7 @@ class Map():
                         (tile_y + margin) * spacing,
                         tileset_tilesize, tileset_tilesize)
                     tileList[count] = tilesetImg.subsurface(rect)
-                    tileProp[count] = tilesetData.get('properties')
+                    tileProp[count] = tilesetData.get('properties').copy()
                     addProps = tilesetData.get('tileproperties')
                     if addProps:
                         perTileProps = addProps.get(str(count - offset))
@@ -241,6 +241,7 @@ class Sector:
         self.neighbors[GameConstants.DIRECTION_RIGHT] = None
 
         self.properties = {}
+        self.changed = [] # Stores changed properties
 
     def SetCoordinate(self, x, y):
         self.x = x
@@ -267,6 +268,10 @@ class Sector:
             for prop in properties:
                 if prop != None:
                     self.properties.update(prop)
+
+    def ChangeProperty(self, prop, val):
+        self.properties[prop] = val
+        self.changed.append(prop)
 
     def CanMove(self, direction):
         return self.neighbors[direction] != None and \

@@ -66,6 +66,7 @@ class Charactor:
         self.prevDirs = []
         # Records the current moving direction
         self.currDir = None
+        self.facing = None
         
         self.moving = False
         self.moveStartTime = 0
@@ -74,9 +75,10 @@ class Charactor:
     def Move(self, direction, facing=None):
         if not facing:
             facing = direction
+        self.facing = facing
         if self.sector.CanMove(direction):
            newSector = self.sector.neighbors[direction]
-           Debug(newSector)
+           Debug("Charactor: Move(): ", newSector)
            self.sector = newSector
            self.UpdateCoordinate()
            ev = Events.CharactorMoveEvent(self)
@@ -85,6 +87,7 @@ class Charactor:
     #------------------------------
     def Place(self, sector, facing=GC.DIRECTION_UP):
         self.sector = sector
+        self.facing = facing
         self.UpdateCoordinate()
         ev = Events.CharactorPlaceEvent(self)
         self.evManager.Post(ev)
@@ -154,7 +157,7 @@ class Charactor:
             # --------------Basic Operation-----------
             elif event.key == K_z:
                 ev = Events.SectorCheckRequest(self, self.sector, 
-                        self.currDir)
+                        self.facing)
                 self.evManager.Post(ev)
             # --------------End Basic Operation--------
 
@@ -206,7 +209,7 @@ class Charactor:
             # --------------End Moving-----------------
         elif isinstance(event, Events.SectorCheckRequest):
             # Test Code
-            print(self, self.sector)
+            Debug("Charactor: Notify(): ", self, self.sector)
             # ---------
 
 
