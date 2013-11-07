@@ -127,6 +127,7 @@ class Charactor:
             self.sprite.Update()
         elif isinstance(event, Events.KeyPressedEvent):
             # TODO: If GUI is on, don't move
+            # --------------Moving-----------------
             if event.key == K_RIGHT:
                 if self.currDir != GC.DIRECTION_RIGHT: # Direction changed
                     if self.currDir != None:
@@ -149,8 +150,16 @@ class Charactor:
                     if self.currDir != None:
                         self.prevDirs.append(self.currDir) # Store Direction
                     self.currDir = GC.DIRECTION_DOWN
+            # --------------End Moving-----------------
+            # --------------Basic Operation-----------
+            elif event.key == K_z:
+                ev = Events.SectorCheckRequest(self, self.sector, 
+                        self.currDir)
+                self.evManager.Post(ev)
+            # --------------End Basic Operation--------
 
         elif isinstance(event, Events.KeyReleasedEvent):
+            # --------------Moving-----------------
             if event.key == K_RIGHT:
                 if self.currDir == GC.DIRECTION_RIGHT:
                     if self.prevDirs != []:
@@ -194,6 +203,11 @@ class Charactor:
                 else:
                     if GC.DIRECTION_DOWN in self.prevDirs:
                         self.prevDirs.remove(GC.DIRECTION_DOWN)
+            # --------------End Moving-----------------
+        elif isinstance(event, Events.SectorCheckRequest):
+            # Test Code
+            print(self, self.sector)
+            # ---------
 
 
 class CharactorSprite(pygame.sprite.Sprite):

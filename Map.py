@@ -130,6 +130,8 @@ class Map():
             try:
                 tilesetImg = pygame.image.load('data/' + tilesetData['image'])
             except:
+                ErrorMsg("Tile set file \'", tilesetData['image'],
+                        "\' does not exist.")
                 raise Exception(
                     "Error: Tile set file \'", tilesetData['image'], "\' does not exist.")
             tilesetImg = tilesetImg.convert()
@@ -139,7 +141,8 @@ class Map():
             tileset_tilesize = tilesetData['tilewidth']
             tilesetWidth, tilesetHeight = tilesetImg.get_size()
             # This is the index offset of tileset
-            count = tilesetData['firstgid'] - 1
+            offset = tilesetData['firstgid'] - 1
+            count = offset 
             for tile_y in range(0,
                                 int(tilesetHeight / tileset_tilesize)):
                 for tile_x in range(0,
@@ -151,7 +154,12 @@ class Map():
                         (tile_y + margin) * spacing,
                         tileset_tilesize, tileset_tilesize)
                     tileList[count] = tilesetImg.subsurface(rect)
-                    tileProp[count] = tilesetData['properties']
+                    tileProp[count] = tilesetData.get('properties')
+                    addProps = tilesetData.get('tileproperties')
+                    if addProps:
+                        perTileProps = addProps.get(str(count - offset))
+                        if perTileProps:
+                            tileProp[count].update(perTileProps)
                     count += 1
             # When there is no tile, i.e. tile data is 0
             tileList[-1] = None
