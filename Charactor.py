@@ -98,7 +98,7 @@ class Charactor:
     #----------------------------
     def SetSprite(self, sprite):
         '''
-        @type sprite: CharactorSprite
+        @type sprite: CharactorPGSprite
         '''
         self.sprite = sprite
 
@@ -213,9 +213,25 @@ class Charactor:
             # ---------
 
 
-class CharactorSprite(pygame.sprite.Sprite):
+class CharactorSprite():
     count = 0
     def __init__(self, charactor, surface):
+        self.image = None
+        self.rect = None
+
+        self.count += 1
+        self.identity = self.count
+        
+        self.charactor = charactor
+
+        self.moveTo = None
+
+    def Update(self):
+        self.moveTo = None
+class CharactorPGSprite(CharactorSprite):
+    def __init__(self, charactor, surface):
+        super(CharactorPGSprite, self).__init__(charactor,
+                surface)
         pygame.sprite.Sprite.__init__(self)
 
         charactorSurf = pygame.Surface((GC.TILESIZE,
@@ -227,15 +243,14 @@ class CharactorSprite(pygame.sprite.Sprite):
         self.image = charactorSurf
         self.rect = charactorSurf.get_rect()
 
-        CharactorSprite.count += 1
-        self.identity = CharactorSprite.count
+        #self.count += 1
+        #self.identity = CharactorPGSprite.count
 
-        self.charactor = charactor
+        #self.charactor = charactor
         # The new position of sprite
-        self.moveTo = None
+        #self.moveTo = None
 
     def Update(self):
         if self.moveTo:
             self.rect.topleft = self.moveTo
-            self.moveTo = None
 

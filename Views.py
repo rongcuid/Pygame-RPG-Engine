@@ -14,9 +14,13 @@ import EventManager
 import Events
 import Controllers
 
-
+class View():
+    def __init__(self, evManager):
+        self.evManager = evManager
+    def Notify(self, event):
+        pass
 #---------------------------------
-class PygameView:
+class PygameView(View):
 
     '''
     Pygame View of the game, handles the display

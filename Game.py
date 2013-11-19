@@ -40,7 +40,7 @@ class Game:
         # Test Code    
         self.charactors = [Charactor.Charactor(evManager)]
         img = pygame.image.load("data/Player-test.png")
-        sprite = Charactor.CharactorSprite(self.charactors[0],img)
+        sprite = Charactor.CharactorPGSprite(self.charactors[0],img)
         self.charactors[0].SetSprite(sprite)
         self.Start()
         # ----------
