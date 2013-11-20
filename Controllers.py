@@ -5,11 +5,9 @@ Contains all controllers needed for the game.
 import pygame
 from pygame.locals import *
 
-from Debug import Debug
+from Imports.common import *
 
-import GameConstants as GC
 import EventManager
-import Events
 
 
 class KeyboardController():

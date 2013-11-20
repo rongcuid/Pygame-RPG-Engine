@@ -4,14 +4,14 @@ Contains class Game
 '''
 
 import sys
+# Temporary Test
 import pygame
 from pygame.locals import *
+# ------
 
-from Debug import Debug
+from Imports.common import *
 
-import GameConstants
 import EventManager
-import Events
 import Controllers
 import Views
 import Map
@@ -36,7 +36,7 @@ class Game:
 
         self.state = Game.STATE_PREPARING
 
-        self.map = Map.Map(GameConstants.TEST_LEVEL_MAP, evManager)
+        self.map = Map.Map(GC.TEST_LEVEL_MAP, evManager)
         # Test Code    
         self.charactors = [Charactor.Charactor(evManager)]
         img = pygame.image.load("data/Player-test.png")

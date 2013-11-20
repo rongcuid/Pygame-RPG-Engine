@@ -1,5 +1,7 @@
 Things that I think of:
 
+- Completely separate out pygame
+
 - GUI
     - TextBox
     - Choise

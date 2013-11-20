@@ -3,15 +3,10 @@ This file is the View part of the game.
 Contains class PygameView
 '''
 
-import sys
-import pygame
-from pygame.locals import *
+from Imports.pygame import *
+from Imports.common import *
 
-from Debug import Debug
-
-import GameConstants as GC
 import EventManager
-import Events
 import Controllers
 
 class View():

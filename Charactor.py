@@ -7,9 +7,8 @@ Created on Sep 1, 2013
 
 import pygame
 from pygame.locals import *
-import GameConstants as GC
-import Events
-from Debug import Debug
+
+from Imports.common import *
 
 class Player:
 
@@ -228,6 +227,7 @@ class CharactorSprite():
 
     def Update(self):
         self.moveTo = None
+
 class CharactorPGSprite(CharactorSprite):
     def __init__(self, charactor, surface):
         super(CharactorPGSprite, self).__init__(charactor,

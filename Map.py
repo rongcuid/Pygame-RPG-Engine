@@ -5,16 +5,13 @@ Created on Sep 1, 2013
 '''
 
 import sys
-import traceback
 import json
 import pygame
 from pygame.locals import *
 
-from Debug import *
+from Imports.common import *
 
-import GameConstants
 import EventManager
-import Events
 
 #-----------------------------
 
@@ -128,6 +125,7 @@ class Map():
         tileProp = {}
         for tilesetData in tilesets:
             try:
+                # TODO: Need to get rid of pygame
                 tilesetImg = pygame.image.load('data/' + tilesetData['image'])
             except:
                 ErrorMsg("Tile set file \'", tilesetData['image'],
@@ -235,10 +233,10 @@ class Sector:
         '''
         self.evManager = evManager
         self.neighbors = list(range(4))
-        self.neighbors[GameConstants.DIRECTION_UP] = None
-        self.neighbors[GameConstants.DIRECTION_DOWN] = None
-        self.neighbors[GameConstants.DIRECTION_LEFT] = None
-        self.neighbors[GameConstants.DIRECTION_RIGHT] = None
+        self.neighbors[GC.DIRECTION_UP] = None
+        self.neighbors[GC.DIRECTION_DOWN] = None
+        self.neighbors[GC.DIRECTION_LEFT] = None
+        self.neighbors[GC.DIRECTION_RIGHT] = None
 
         self.properties = {}
         self.changed = [] # Stores changed properties
