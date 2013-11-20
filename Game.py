@@ -5,8 +5,7 @@ Contains class Game
 
 import sys
 # Temporary Test
-import pygame
-from pygame.locals import *
+from Imports.pygame import *
 # ------
 
 from Imports.common import *
@@ -77,7 +76,6 @@ def main():
     
     game = Game(evManager)
     # Temp Test Code
-    #pygameView.SetTrack(game.charactors[0])
     # -------------
     spinner.Run()
 

@@ -4,10 +4,10 @@ Created on Aug 30, 2013
 @author: carl
 '''
 
-from InfoRNA import InfoRNA
-from PropertyRNA import PropRNA
+from .RNA_Info import *
+from .RNA_Property import *
 
-class StructRNA():
+class RNA_Struct():
     '''
     An RNA object that stores multiple values
     '''
@@ -15,10 +15,10 @@ class StructRNA():
 
     def __init__(self,desc=""):
         '''
-        Initiate one Structure RNA object, and one InfoRNA object
+        Initiate one Structure RNA object, and one RNA_Info object
         '''
         # Create info object
-        self.info = InfoRNA(desc)
+        self.info = RNA_Info(desc)
         # Register this object to info object
         self.info.assign(self)
         # Create a list of properties registered
@@ -26,9 +26,10 @@ class StructRNA():
         
     def register(self,prop):
         '''
-        Register a PropRNA object
+        Register a RNA_Prop object
         '''
-        for p in self.registeredList:
-            if prop == p:
-                raise Exception("[StructRNA]Property ",p," has already registered to ",self,"!")
-        self.registeredList += prop
+        if prop in self.registeredList:
+            raise Exception(self.__class__.__name__,
+                    "Property ",p," has already registered to ",
+                    self,"!")
+        self.registeredList.append(prop)

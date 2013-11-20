@@ -1,13 +1,15 @@
 '''
 Created on Aug 30, 2013
 
-This file includes the InfoRNA class which stores basic information
+This file includes the RNA_Info class which stores basic information
 of RNA structure. The class itself also stores ALL information
 
 @author: carl
 '''
+from .RNA_Property import *
+from .RNA_Structure import *
 
-class InfoRNA():
+class RNA_Info():
     '''
     This class stores the basic information of RNA structure.
     Eg. name, description, id
@@ -22,32 +24,34 @@ class InfoRNA():
     
     def __init__(self,desc=""):
         '''
-        Renew the ID, initializes an InfoRNA object, and record it
+        Renew the ID, initializes an RNA_Info object, and record it
         to nameDict
         @type desc: String
         '''
         # Gives a new, non-repetitive ID
-        InfoRNA.prevID += 1
+        RNA_Info.prevID += 1
         # Assign the new ID
-        self.id = InfoRNA.prevID
+        self.id = RNA_Info.prevID
                 # Record name to nameDict
-        InfoRNA.nameDict["self.name"] = self
+        RNA_Info.nameDict["self.name"] = self
         # Assign description
         self.description = desc
-        # To tell that this InfoRNA is not used
+        # To tell that this RNA_Info is not used
         self.assigned = False
         
     def assign(self, rnaObj):
         '''
-        Assign a RNA object to InfoRNA object
+        Assign a RNA object to RNA_Info object
         '''
-        if not self.assigned and type(rnaObj) == PropRNA: #or type(rnaObj) == StructRNA:
+        if not self.assigned and \
+                (isinstance(rnaObj,RNA_Prop) or \
+                isinstance(rnaObj, RNA_Struct)):
             # Stores the RNA Object contain
             self.contain = rnaObj
-            # To tell that this InfoRNA object is used
+            # To tell that this RNA_Info object is used
             self.assigned = True
         else:
-            raise Exception("[InfoRNA]This InfoRNA ",self,"cannot assign object ",rnaObj,"!")
+            raise Exception("[RNA_Info]This RNA_Info ",self,"cannot assign object ",rnaObj,"!")
         
 
     def getDesc(self):
@@ -59,16 +63,15 @@ class InfoRNA():
     def checkNameUnique(cls,name):
         for n in cls.nameList:
             if name == n:
-                raise Exception("[InfoRNA]The name ",name,"is not unique!")
+                raise Exception("[RNA_Info]The name ",name,"is not unique!")
     
     @classmethod
     def retrieve(cls,name):
         '''
-        Retrieves an InfoRNA object from name
+        Retrieves an RNA_Info object from name
         '''
         for n in cls.nameList:
             if n == name:
                 return cls.nameDict[name]
-        raise Exception("[InfoRNA]The object with name ",name,"does not exist!")   
+        raise Exception("[RNA_Info]The object with name ",name,"does not exist!")   
 
-from PropertyRNA import PropRNA

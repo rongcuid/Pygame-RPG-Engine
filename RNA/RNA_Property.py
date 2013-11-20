@@ -4,9 +4,9 @@ Created on Aug 30, 2013
 @author: carl
 '''
 
-from InfoRNA import InfoRNA
+from .RNA_Info import *
 
-class PropRNA():
+class RNA_Prop():
     '''
     This class stores a value(property).
     '''
@@ -14,17 +14,26 @@ class PropRNA():
     
     def __init__(self,value,desc=""):
         '''
-        Creates an InfoRNA object and assign this object to the InfoRNA object,
+        Creates an RNA_Info object and assign this object to the InfoRNA object,
         then store the value
         '''
-        # Create an InfoRNA object
-        self.info = InfoRNA(desc)
-        # Register this PropRNA to the InfoRNA object just created
+        # Create an RNA_Info object
+        self.info = RNA_Info(desc)
+        # Register this RNA_Prop to the RNA_Info object just created
         self.info.assign(self)
         # Set value
         self.value = value
+        # Set animation
+        self.animation = None
     
-    def get(self):
+    def get(self, time=None):
         return self.value
     def set(self,value):
         self.value = value
+    def set_animation(self, animation):
+        self.animation = animation
+
+    def __lt__(self, other):
+        return self.value < other.value
+    def __gt__(self, other):
+        return self.value > other.value

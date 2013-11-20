@@ -253,4 +253,5 @@ class CharactorPGSprite(CharactorSprite):
     def Update(self):
         if self.moveTo:
             self.rect.topleft = self.moveTo
+        super(self.__class__, self).Update()
 
