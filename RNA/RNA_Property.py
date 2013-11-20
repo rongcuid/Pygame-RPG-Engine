@@ -37,3 +37,14 @@ class RNA_Prop():
         return self.value < other.value
     def __gt__(self, other):
         return self.value > other.value
+    def __str__(self):
+        return '[%s]: %s, Value: %s' \
+                %(self.__class__.__name__,
+                        str(self.info),str(self.value))
+
+class RNA_Prop_Bool(RNA_Prop):
+    def __init__(self, value, desc=''):
+        assert isinstance(value, bool)
+        super(self.__class__).__init__(self, value, desc)
+
+

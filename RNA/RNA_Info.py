@@ -6,8 +6,6 @@ of RNA structure. The class itself also stores ALL information
 
 @author: carl
 '''
-from .RNA_Property import *
-from .RNA_Structure import *
 
 class RNA_Info():
     '''
@@ -43,6 +41,8 @@ class RNA_Info():
         '''
         Assign a RNA object to RNA_Info object
         '''
+        from .RNA_Property import RNA_Prop
+        from .RNA_Structure import RNA_Struct
         if not self.assigned and \
                 (isinstance(rnaObj,RNA_Prop) or \
                 isinstance(rnaObj, RNA_Struct)):
@@ -59,6 +59,8 @@ class RNA_Info():
     def getID(self):
         return self.id
     
+    def __str__(self):
+        return 'ID: %d, Desc: %s' %(self.id, self.description)
     @classmethod
     def checkNameUnique(cls,name):
         for n in cls.nameList:
