@@ -21,15 +21,21 @@ class RNA_Struct():
         self.info = RNA_Info(desc)
         # Register this object to info object
         self.info.assign(self)
-        # Create a list of properties registered
-        self.registeredList = []
+        # Create a dict of properties registered
+        self.registeredDict = {}
         
-    def register(self,prop):
+    def register(self,name,prop):
         '''
         Register a RNA_Prop object
         '''
-        if prop in self.registeredList:
+        if prop in self.registeredDict.values():
             raise Exception(self.__class__.__name__,
-                    "Property ",p," has already registered to ",
+                    "Property ",prop," has already registered to ",
                     self,"!")
-        self.registeredList.append(prop)
+        self.registeredDict[name] = prop
+
+    def get(self, name):
+        return self.registeredDict.get(name)
+    
+    def get_all(self):
+        return self.registeredDict
