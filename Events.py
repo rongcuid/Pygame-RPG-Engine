@@ -127,3 +127,13 @@ class WindowResizeRequest(Event):
     def __init__(self, size):
         self.name = "Window Resize Request Event"
         self.size = size
+
+class SectorCheckRequest(Event):
+    '''
+    Request to check a sector
+    '''
+    def __init__(self, charactor, sector, direction = None):
+        self.name = "Sector Check Request"
+        self.sector = sector
+        self.direction = direction
+        self.charactor = charactor

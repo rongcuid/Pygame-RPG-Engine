@@ -7,9 +7,8 @@ Created on Sep 1, 2013
 
 import pygame
 from pygame.locals import *
-import GameConstants as GC
-import Events
-from Debug import Debug
+
+from Imports.common import *
 
 class Player:
 
@@ -66,6 +65,7 @@ class Charactor:
         self.prevDirs = []
         # Records the current moving direction
         self.currDir = None
+        self.facing = None
         
         self.moving = False
         self.moveStartTime = 0
@@ -74,9 +74,10 @@ class Charactor:
     def Move(self, direction, facing=None):
         if not facing:
             facing = direction
+        self.facing = facing
         if self.sector.CanMove(direction):
            newSector = self.sector.neighbors[direction]
-           Debug(newSector)
+           Debug("Charactor: Move(): ", newSector)
            self.sector = newSector
            self.UpdateCoordinate()
            ev = Events.CharactorMoveEvent(self)
@@ -85,6 +86,7 @@ class Charactor:
     #------------------------------
     def Place(self, sector, facing=GC.DIRECTION_UP):
         self.sector = sector
+        self.facing = facing
         self.UpdateCoordinate()
         ev = Events.CharactorPlaceEvent(self)
         self.evManager.Post(ev)
@@ -95,7 +97,7 @@ class Charactor:
     #----------------------------
     def SetSprite(self, sprite):
         '''
-        @type sprite: CharactorSprite
+        @type sprite: CharactorPGSprite
         '''
         self.sprite = sprite
 
@@ -127,6 +129,7 @@ class Charactor:
             self.sprite.Update()
         elif isinstance(event, Events.KeyPressedEvent):
             # TODO: If GUI is on, don't move
+            # --------------Moving-----------------
             if event.key == K_RIGHT:
                 if self.currDir != GC.DIRECTION_RIGHT: # Direction changed
                     if self.currDir != None:
@@ -149,8 +152,16 @@ class Charactor:
                     if self.currDir != None:
                         self.prevDirs.append(self.currDir) # Store Direction
                     self.currDir = GC.DIRECTION_DOWN
+            # --------------End Moving-----------------
+            # --------------Basic Operation-----------
+            elif event.key == K_z:
+                ev = Events.SectorCheckRequest(self, self.sector, 
+                        self.facing)
+                self.evManager.Post(ev)
+            # --------------End Basic Operation--------
 
         elif isinstance(event, Events.KeyReleasedEvent):
+            # --------------Moving-----------------
             if event.key == K_RIGHT:
                 if self.currDir == GC.DIRECTION_RIGHT:
                     if self.prevDirs != []:
@@ -194,11 +205,33 @@ class Charactor:
                 else:
                     if GC.DIRECTION_DOWN in self.prevDirs:
                         self.prevDirs.remove(GC.DIRECTION_DOWN)
+            # --------------End Moving-----------------
+        elif isinstance(event, Events.SectorCheckRequest):
+            # Test Code
+            Debug("Charactor: Notify(): ", self, self.sector)
+            # ---------
 
 
-class CharactorSprite(pygame.sprite.Sprite):
+class CharactorSprite():
     count = 0
     def __init__(self, charactor, surface):
+        self.image = None
+        self.rect = None
+
+        self.count += 1
+        self.identity = self.count
+        
+        self.charactor = charactor
+
+        self.moveTo = None
+
+    def Update(self):
+        self.moveTo = None
+
+class CharactorPGSprite(CharactorSprite):
+    def __init__(self, charactor, surface):
+        super(CharactorPGSprite, self).__init__(charactor,
+                surface)
         pygame.sprite.Sprite.__init__(self)
 
         charactorSurf = pygame.Surface((GC.TILESIZE,
@@ -210,15 +243,14 @@ class CharactorSprite(pygame.sprite.Sprite):
         self.image = charactorSurf
         self.rect = charactorSurf.get_rect()
 
-        CharactorSprite.count += 1
-        self.identity = CharactorSprite.count
+        #self.count += 1
+        #self.identity = CharactorPGSprite.count
 
-        self.charactor = charactor
+        #self.charactor = charactor
         # The new position of sprite
-        self.moveTo = None
+        #self.moveTo = None
 
     def Update(self):
         if self.moveTo:
             self.rect.topleft = self.moveTo
-            self.moveTo = None
 

@@ -5,16 +5,13 @@ Created on Sep 1, 2013
 '''
 
 import sys
-import traceback
 import json
 import pygame
 from pygame.locals import *
 
-from Debug import Debug
+from Imports.common import *
 
-import GameConstants
 import EventManager
-import Events
 
 #-----------------------------
 
@@ -75,6 +72,7 @@ class Map():
         try:
             map_data = json.load(open(filename))
         except:
+            ErrorMsg("Cannot read map data file ", filename)
             raise Exception("Error: Cannot read map data file ", filename)
         Debug("Map data ", filename, " is successfully read!")
         tileLayersData = map_data['layers']
@@ -127,8 +125,11 @@ class Map():
         tileProp = {}
         for tilesetData in tilesets:
             try:
+                # TODO: Need to get rid of pygame
                 tilesetImg = pygame.image.load('data/' + tilesetData['image'])
             except:
+                ErrorMsg("Tile set file \'", tilesetData['image'],
+                        "\' does not exist.")
                 raise Exception(
                     "Error: Tile set file \'", tilesetData['image'], "\' does not exist.")
             tilesetImg = tilesetImg.convert()
@@ -138,7 +139,8 @@ class Map():
             tileset_tilesize = tilesetData['tilewidth']
             tilesetWidth, tilesetHeight = tilesetImg.get_size()
             # This is the index offset of tileset
-            count = tilesetData['firstgid'] - 1
+            offset = tilesetData['firstgid'] - 1
+            count = offset 
             for tile_y in range(0,
                                 int(tilesetHeight / tileset_tilesize)):
                 for tile_x in range(0,
@@ -150,7 +152,12 @@ class Map():
                         (tile_y + margin) * spacing,
                         tileset_tilesize, tileset_tilesize)
                     tileList[count] = tilesetImg.subsurface(rect)
-                    tileProp[count] = tilesetData['properties']
+                    tileProp[count] = tilesetData.get('properties').copy()
+                    addProps = tilesetData.get('tileproperties')
+                    if addProps:
+                        perTileProps = addProps.get(str(count - offset))
+                        if perTileProps:
+                            tileProp[count].update(perTileProps)
                     count += 1
             # When there is no tile, i.e. tile data is 0
             tileList[-1] = None
@@ -226,12 +233,13 @@ class Sector:
         '''
         self.evManager = evManager
         self.neighbors = list(range(4))
-        self.neighbors[GameConstants.DIRECTION_UP] = None
-        self.neighbors[GameConstants.DIRECTION_DOWN] = None
-        self.neighbors[GameConstants.DIRECTION_LEFT] = None
-        self.neighbors[GameConstants.DIRECTION_RIGHT] = None
+        self.neighbors[GC.DIRECTION_UP] = None
+        self.neighbors[GC.DIRECTION_DOWN] = None
+        self.neighbors[GC.DIRECTION_LEFT] = None
+        self.neighbors[GC.DIRECTION_RIGHT] = None
 
         self.properties = {}
+        self.changed = [] # Stores changed properties
 
     def SetCoordinate(self, x, y):
         self.x = x
@@ -258,6 +266,10 @@ class Sector:
             for prop in properties:
                 if prop != None:
                     self.properties.update(prop)
+
+    def ChangeProperty(self, prop, val):
+        self.properties[prop] = val
+        self.changed.append(prop)
 
     def CanMove(self, direction):
         return self.neighbors[direction] != None and \

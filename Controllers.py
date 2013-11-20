@@ -5,11 +5,9 @@ Contains all controllers needed for the game.
 import pygame
 from pygame.locals import *
 
-from Debug import Debug
+from Imports.common import *
 
-import GameConstants
 import EventManager
-import Events
 
 
 class KeyboardController():
@@ -71,13 +69,13 @@ class CPUSpinnerController():
             if self.game:
                 # Post a LogicTickEvent every logic cycle
                 if self.IntervalPassed(prevTick,
-                                       1000 / GameConstants.LOGICRATE):
+                                       1000 / GC.LOGICRATE):
                     self.evManager.Post(Events.LogicTickEvent(self.game))
             # Post a SecondEvent every second
             if self.OneSecPassed(prevTick):
                 self.evManager.Post(Events.SecondEvent())
             prevTick = pygame.time.get_ticks()
-            # pygame.time.Clock().tick(100)
+            pygame.time.Clock().tick(GC.TICKRATE)
 
     #----------------------------
     def OneSecPassed(self, prevTick):

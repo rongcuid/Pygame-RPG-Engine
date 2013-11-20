@@ -3,7 +3,16 @@ import GameConstants
 
 def Debug(*msgs):
     if GameConstants.DEBUG:
-        print("[Debug] ", end="")
+        message = '[Debug] '
         for msg in msgs:
-            print(msg, end="")
-        print()
+            message += str(msg)
+        print(message)
+
+def ErrorMsg(*msgs):
+    message = ''
+    for msg in msgs:
+        message += msg
+    import tkinter
+    import tkinter.messagebox
+    tkinter.Tk().withdraw()
+    tkinter.messagebox.showerror("Error!", message)

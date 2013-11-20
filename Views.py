@@ -3,20 +3,19 @@ This file is the View part of the game.
 Contains class PygameView
 '''
 
-import sys
-import pygame
-from pygame.locals import *
+from Imports.pygame import *
+from Imports.common import *
 
-from Debug import Debug
-
-import GameConstants as GC
 import EventManager
-import Events
 import Controllers
 
-
+class View():
+    def __init__(self, evManager):
+        self.evManager = evManager
+    def Notify(self, event):
+        pass
 #---------------------------------
-class PygameView:
+class PygameView(View):
 
     '''
     Pygame View of the game, handles the display
@@ -40,6 +39,7 @@ class PygameView:
         self.gameMaps = []
         self.current_map = None
         self.game = None
+        self.messages = []
         # -----------------
         pygame.init()
 
@@ -180,10 +180,10 @@ class PygameView:
             if event.key == K_t:
                 if self.camera_state == PygameView.CAMERA_TRACK_DISABLED:
                     self.SetTrack(self.game.charactors[0])
-                    Debug("Track enabled")
+                    Debug("PygameView: Track enabled")
                 else:
                     self.DisableTrack()
-                    Debug("Track disabled")
+                    Debug("PygameView: Track disabled")
         #---
         elif isinstance(event, Events.WindowResizeRequest):
             pygame.display.quit()
@@ -194,4 +194,3 @@ class PygameView:
 
             self.window.blit(self.background, (0, 0))
             pygame.display.update()
-
