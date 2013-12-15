@@ -3,6 +3,8 @@ Things that I think of:
 - Completely separate out pygame
 - Complete RNA 
 
+- View
+    - Tile Priority
 - GUI
     - TextBox
     - Choise
