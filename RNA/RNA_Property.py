@@ -33,6 +33,10 @@ class RNA_Prop():
         if self.animation != None:
             return self.animation.get(time)
         return self.value
+    def get_time(self):
+        if self.animation != None:
+            return self.animation.time
+        return None
     def set(self,value):
         self.value = value
     def set_animation(self, animation):
